@@ -1,3 +1,6 @@
 [submodule "Rimups/Ants"]
 	path = Rimups/Ants
 	url = https://github.com/soulkata/rimworld.git
+[submodule "AntsA12Buggy"]
+	path = AntsA12Buggy
+	url = https://github.com/soulkata/rimworld.git
