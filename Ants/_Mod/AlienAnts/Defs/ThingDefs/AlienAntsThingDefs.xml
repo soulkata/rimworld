@@ -1,0 +1,431 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ThingDefs>
+
+
+  <ThingDef Name="BaseGun" Abstract="True">
+    <category>Item</category>
+    <thingClass>ThingWithComps</thingClass>
+    <equipmentType>Primary</equipmentType>
+    <pathCost>10</pathCost>
+    <useHitPoints>True</useHitPoints>
+    <selectable>True</selectable>
+    <graphicData>
+        <onGroundRandomRotateAngle>35</onGroundRandomRotateAngle>
+    </graphicData>
+    <drawGUIOverlay>true</drawGUIOverlay>
+    <statBases>
+      <MaxHitPoints>100</MaxHitPoints>
+      <Flammability>1.0</Flammability>
+      <DeteriorationRate>1</DeteriorationRate>
+      <SellPriceFactor>0.5</SellPriceFactor>
+    </statBases>
+    <altitudeLayer>Item</altitudeLayer>
+    <alwaysHaulable>True</alwaysHaulable>
+    <tickerType>Never</tickerType>
+    <techLevel>Midworld</techLevel>
+    <thingCategories>
+      <li>WeaponsRanged</li>
+    </thingCategories>
+    <inspectorTabs>
+      <li>ITab_Art</li>
+    </inspectorTabs>
+    <comps>
+      <li>
+        <compClass>CompForbiddable</compClass>
+      </li>
+      <li>
+        <compClass>CompEquippable</compClass>
+      </li>
+      <li>
+        <compClass>CompQuality</compClass>
+      </li>
+      <li>
+        <compClass>CompArt</compClass>
+        <nameMaker>NamerGun</nameMaker>
+        <descriptionMaker>ArtWeaponGun</descriptionMaker>
+        <minQualityForArtistic>Excellent</minQualityForArtistic>
+      </li>
+    </comps>
+    <smeltProducts>
+      <Steel>20</Steel>
+    </smeltProducts>
+  </ThingDef>
+
+  <ThingDef Name="BaseBullet" Abstract="True">
+    <category>Projectile</category>
+    <tickerType>Normal</tickerType>
+    <altitudeLayer>Projectile</altitudeLayer>
+    <thingClass>Bullet</thingClass>
+    <label>bullet</label>
+    <useHitPoints>False</useHitPoints>
+    <neverMultiSelect>True</neverMultiSelect>
+    <graphicData>
+        <shaderType>Transparent</shaderType>
+    </graphicData>
+  </ThingDef>
+  
+  <ThingDef Name="BasePawn" Abstract="True">
+    <thingClass>Pawn</thingClass>
+    <category>Pawn</category>
+    <selectable>true</selectable>
+    <tickerType>Normal</tickerType>
+    <altitudeLayer>Pawn</altitudeLayer>
+    <useHitPoints>false</useHitPoints>
+    <hasTooltip>true</hasTooltip>
+    <soundImpactDefault>BulletImpactFlesh</soundImpactDefault>
+    <inspectorTabs>
+      <li>ITab_Pawn_Health</li>
+      <li>ITab_Pawn_Needs</li>
+      <li>ITab_Pawn_Character</li>
+      <li>ITab_Pawn_Training</li>
+      <li>ITab_Pawn_Gear</li>
+      <li>ITab_Pawn_Guest</li>
+      <li>ITab_Pawn_Prisoner</li>
+    </inspectorTabs>
+    <comps>
+      <li>
+        <compClass>CompAttachBase</compClass>
+      </li>
+    </comps>
+    <drawGUIOverlay>true</drawGUIOverlay>
+  </ThingDef>
+
+  <ThingDef ParentName="BasePawn" Name="BaseAnt" Abstract="True">
+    <statBases>
+      <Flammability>0</Flammability>
+      <ComfyTemperatureMin>-100</ComfyTemperatureMin>
+      <ComfyTemperatureMax>250</ComfyTemperatureMax>
+	  <LeatherAmount>0</LeatherAmount>
+	  <MeatAmount>15</MeatAmount>
+    </statBases>
+    <race>      
+      <mechanoid>false</mechanoid>
+      <needsRest>false</needsRest>
+      <hasGenders>false</hasGenders>
+      <isFlesh>true</isFlesh>
+      <diet>NeverEats</diet>
+      <lifeStageAges>
+        <li>
+          <def>EusocialInsectLarva</def>
+          <minAge>0</minAge>
+        </li>
+        <li>
+          <def>EusocialInsectJuvenile</def>
+          <minAge>0.03</minAge>
+        </li>
+        <li>
+          <def>EusocialInsectAdult</def>
+          <minAge>0.4</minAge>
+          <soundWounded>Pawn_Megascarab_Wounded</soundWounded>
+          <soundDeath>Pawn_Megascarab_Death</soundDeath>
+          <soundCall>Pawn_Megascarab_Call</soundCall>
+          <soundAngry>Pawn_Megascarab_Angry</soundAngry>
+        </li>
+      </lifeStageAges>
+      <soundMeleeHitPawn>AA_ShotAntMelee</soundMeleeHitPawn>
+      <soundMeleeHitBuilding>AA_ShotAntMelee</soundMeleeHitBuilding>
+      <soundMeleeMiss>AA_ShotAntMelee</soundMeleeMiss>
+      <soundCallIntervalRange>
+        <min>1000</min>
+        <max>2000</max>
+      </soundCallIntervalRange>
+    </race>
+  </ThingDef>
+
+  <!-- ============================ Ants ========================== -->  
+
+  <ThingDef ParentName="BaseAnt">
+    <defName>Ant_Egg</defName>
+    <label>ant egg</label>
+    <description>This is a ant egg, soon it will hatch.</description>
+    <statBases>
+      <MoveSpeed>0.00000001</MoveSpeed>
+    </statBases>
+    <verbs>
+      <li>
+        <verbClass>Verb_MeleeAttack</verbClass>
+        <defaultCooldownTicks>10000</defaultCooldownTicks>
+        <meleeDamageBaseAmount>0</meleeDamageBaseAmount>
+        <meleeDamageDef>Cut</meleeDamageDef>
+        <linkedBodyPartsGroup>Mouth</linkedBodyPartsGroup>
+      </li>
+    </verbs>
+    <race>
+      <intelligence>ToolUser</intelligence>
+      <mechanoid>false</mechanoid>
+      <thinkTree>DoNothingTinkTree</thinkTree>
+      <body>AntLike</body>
+      <baseBodySize>0.1</baseBodySize>
+      <baseHealthScale>2.0</baseHealthScale>
+    </race>
+  </ThingDef>
+
+  <ThingDef ParentName="BaseAnt">
+    <defName>Ant_Worker</defName>
+    <label>ant worker</label>
+    <description>This is a worker ant, which performs the colony labor work.</description>
+    <statBases>
+      <MoveSpeed>3.0</MoveSpeed>
+      <ArmorRating_Sharp>0.2</ArmorRating_Sharp>
+    </statBases>
+    <verbs>
+      <li>
+        <verbClass>Verb_MeleeAttack</verbClass>
+        <defaultCooldownTicks>100</defaultCooldownTicks>
+        <meleeDamageBaseAmount>6</meleeDamageBaseAmount>
+        <meleeDamageDef>Cut</meleeDamageDef>
+        <linkedBodyPartsGroup>Mouth</linkedBodyPartsGroup>
+      </li>
+    </verbs>
+    <race>
+      <intelligence>ToolUser</intelligence>
+      <mechanoid>false</mechanoid>
+      <thinkTree>AbilityThinkTree</thinkTree>
+      <body>AntLike</body>
+      <baseBodySize>0.3</baseBodySize>
+      <baseHealthScale>0.3</baseHealthScale>
+    </race>
+  </ThingDef>
+
+  <ThingDef ParentName="BaseAnt">
+    <defName>Ant_Warrior</defName>
+    <label>ant warrior</label>
+    <description>This is a melee fighter ant, responsible for attacking invaders of the colony.</description>
+    <statBases>
+      <MoveSpeed>3.0</MoveSpeed>
+      <ArmorRating_Sharp>0.5</ArmorRating_Sharp>
+    </statBases>
+    <verbs>
+      <li>
+        <verbClass>Verb_MeleeAttack</verbClass>
+        <defaultCooldownTicks>100</defaultCooldownTicks>
+        <meleeDamageBaseAmount>16</meleeDamageBaseAmount>
+        <meleeDamageDef>Cut</meleeDamageDef>
+        <linkedBodyPartsGroup>Mouth</linkedBodyPartsGroup>
+      </li>
+    </verbs>
+    <race>
+      <intelligence>ToolUser</intelligence>
+      <mechanoid>false</mechanoid>
+      <thinkTree>AbilityThinkTree</thinkTree>
+      <body>AntLike</body>
+      <baseBodySize>1.5</baseBodySize>
+      <baseHealthScale>1.0</baseHealthScale>      
+    </race>
+  </ThingDef>
+
+  <ThingDef ParentName="BaseAnt">
+    <defName>Ant_Stinger</defName>
+    <label>ant stinger</label>
+    <description>This is a ranged fighter ant, responsible for defending the colony.</description>
+    <statBases>
+      <MoveSpeed>3.0</MoveSpeed>
+      <ArmorRating_Sharp>0.4</ArmorRating_Sharp>
+    </statBases>
+    <verbs>
+      <li>
+        <verbClass>Verb_MeleeAttack</verbClass>
+        <defaultCooldownTicks>100</defaultCooldownTicks>
+        <meleeDamageBaseAmount>10</meleeDamageBaseAmount>
+        <meleeDamageDef>Cut</meleeDamageDef>
+        <linkedBodyPartsGroup>Mouth</linkedBodyPartsGroup>
+      </li>
+    </verbs>
+    <race>
+      <intelligence>ToolUser</intelligence>
+      <mechanoid>false</mechanoid>
+      <thinkTree>AbilityThinkTree</thinkTree>
+      <body>AntLike</body>
+      <baseBodySize>0.9</baseBodySize>
+      <baseHealthScale>0.8</baseHealthScale>      
+    </race>
+  </ThingDef>
+
+  <ThingDef ParentName="BaseBullet">
+    <defName>Bullet_AlienAntStingerWeapon</defName>
+    <label>alien ant stinger shot</label>
+    <graphicData>
+        <texPath>Things/Projectile/ChargeLanceShot</texPath>
+        <graphicClass>Graphic_Single</graphicClass>
+        <shaderType>TransparentPostLight</shaderType>
+    </graphicData>
+    <projectile>
+      <damageDef>Bullet</damageDef>
+      <damageAmountBase>15</damageAmountBase>
+      <speed>50</speed>
+    </projectile>
+  </ThingDef>
+
+  <ThingDef ParentName="BaseGun">
+    <defName>Gun_AlienAntStingerWeapon</defName>
+    <label>alien ant stinger</label>
+    <description>This is the Alien Ant Stinger weapon body part.</description>
+    <graphicData>
+        <texPath>Stinger_Weapon</texPath>
+        <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <statBases>
+      <MarketValue>2000</MarketValue>
+      <AccuracyTouch>0.6</AccuracyTouch>
+      <AccuracyShort>0.8</AccuracyShort>
+      <AccuracyMedium>0.92</AccuracyMedium>
+      <AccuracyLong>0.88</AccuracyLong>
+      <RangedWeapon_Cooldown>2.8</RangedWeapon_Cooldown>
+    </statBases>
+    <tradeability>Never</tradeability>
+    <techLevel>Neolithic</techLevel>
+    <destroyOnDrop>True</destroyOnDrop>
+    <menuHidden>True</menuHidden>
+    <weaponTags>
+      <li>AlienAntStingerGun</li>
+    </weaponTags>
+    <verbs>
+      <li>
+        <verbClass>Verb_Shoot</verbClass>
+        <hasStandardCommand>true</hasStandardCommand>
+        <projectileDef>Bullet_AlienAntStingerWeapon</projectileDef>
+        <warmupTicks>120</warmupTicks>
+        <range>18</range>
+        <burstShotCount>1</burstShotCount>
+        <soundCast>AA_AntSinger</soundCast><!--
+        <soundCastTail>GunTail_Heavy</soundCastTail>-->
+      </li>
+    </verbs>
+  </ThingDef>
+  
+  <ThingDef ParentName="BaseAnt">
+    <defName>Ant_Nurse</defName>
+    <label>ant nurse</label>
+    <description>This is a healer ant, responsible for healing other injured ants.</description>
+    <statBases>
+      <MoveSpeed>6.0</MoveSpeed>
+      <ArmorRating_Sharp>0.2</ArmorRating_Sharp>
+    </statBases>
+    <verbs>
+      <li>
+        <verbClass>Verb_MeleeAttack</verbClass>
+        <defaultCooldownTicks>100</defaultCooldownTicks>
+        <meleeDamageBaseAmount>6</meleeDamageBaseAmount>
+        <meleeDamageDef>Cut</meleeDamageDef>
+        <linkedBodyPartsGroup>Mouth</linkedBodyPartsGroup>
+      </li>
+    </verbs>
+    <race>
+      <intelligence>ToolUser</intelligence>
+      <mechanoid>false</mechanoid>
+      <thinkTree>AbilityThinkTree</thinkTree>
+      <body>AntLike</body>
+      <baseBodySize>0.9</baseBodySize>
+      <baseHealthScale>1.0</baseHealthScale>      
+    </race>
+  </ThingDef>
+
+  <ThingDef ParentName="BaseBullet">
+    <defName>Bullet_AlienAntNurseWeapon</defName>
+    <label>alien ant nurse shot</label>
+    <graphicData>
+        <texPath>Things/Projectile/ChargeLanceShot</texPath>
+        <graphicClass>Graphic_Single</graphicClass>
+        <shaderType>TransparentPostLight</shaderType>
+    </graphicData>
+    <projectile>
+      <damageDef>Bullet</damageDef>
+      <damageAmountBase>4</damageAmountBase>
+      <speed>50</speed>
+    </projectile>
+  </ThingDef>
+
+  <ThingDef ParentName="BaseGun">
+    <defName>Gun_AlienAntNurseWeapon</defName>
+    <label>alien ant nurse</label>
+    <description>This is the Alien Ant Nurse weapon body part.</description>
+    <graphicData>
+        <texPath>Stinger_Weapon</texPath>
+        <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <statBases>
+      <MarketValue>2000</MarketValue>
+      <AccuracyTouch>0.6</AccuracyTouch>
+      <AccuracyShort>0.8</AccuracyShort>
+      <AccuracyMedium>0.92</AccuracyMedium>
+      <AccuracyLong>0.88</AccuracyLong>
+      <RangedWeapon_Cooldown>2.8</RangedWeapon_Cooldown>
+    </statBases>
+    <tradeability>Never</tradeability>
+    <techLevel>Neolithic</techLevel>
+    <destroyOnDrop>True</destroyOnDrop>
+    <menuHidden>True</menuHidden>
+    <weaponTags>
+      <li>AlienAntNurseGun</li>
+    </weaponTags>
+    <verbs>
+      <li>
+        <verbClass>Verb_Shoot</verbClass>
+        <hasStandardCommand>true</hasStandardCommand>
+        <projectileDef>Bullet_AlienAntNurseWeapon</projectileDef>
+        <warmupTicks>120</warmupTicks>
+        <range>36</range>
+        <burstShotCount>1</burstShotCount>
+        <soundCast>AA_AntSinger</soundCast><!--
+        <soundCastTail>GunTail_Heavy</soundCastTail>-->
+      </li>
+    </verbs>
+  </ThingDef>
+
+  <ThingDef ParentName="BaseAnt">
+    <defName>Ant_Princess</defName>
+    <label>ant princess</label>
+    <description>This is a ant princess, soon it will be queen.</description>
+    <statBases>
+      <MoveSpeed>3.0</MoveSpeed>
+      <ArmorRating_Blunt>0.1</ArmorRating_Blunt>
+      <ArmorRating_Sharp>0.5</ArmorRating_Sharp>
+    </statBases>
+    <verbs>
+      <li>
+        <verbClass>Verb_MeleeAttack</verbClass>
+        <defaultCooldownTicks>140</defaultCooldownTicks>
+        <meleeDamageBaseAmount>15</meleeDamageBaseAmount>
+        <meleeDamageDef>Cut</meleeDamageDef>
+        <linkedBodyPartsGroup>Mouth</linkedBodyPartsGroup>
+      </li>
+    </verbs>
+    <race>
+      <intelligence>ToolUser</intelligence>
+      <mechanoid>false</mechanoid>
+      <thinkTree>AbilityThinkTree</thinkTree>
+      <body>AntLike</body>
+      <baseBodySize>2.0</baseBodySize>
+      <baseHealthScale>2.0</baseHealthScale>
+    </race>
+  </ThingDef>
+  
+  <ThingDef ParentName="BaseAnt">
+    <defName>Ant_Queen</defName>
+    <label>ant queen</label>
+    <description>This is a queen ant, responsible for giving birth to new ants.</description>
+    <statBases>
+      <MoveSpeed>0.5</MoveSpeed>
+      <ArmorRating_Blunt>0.2</ArmorRating_Blunt>
+      <ArmorRating_Sharp>0.6</ArmorRating_Sharp>
+    </statBases>
+    <verbs>
+      <li>
+        <verbClass>Verb_MeleeAttack</verbClass>
+        <defaultCooldownTicks>140</defaultCooldownTicks>
+        <meleeDamageBaseAmount>25</meleeDamageBaseAmount>
+        <meleeDamageDef>Cut</meleeDamageDef>
+        <linkedBodyPartsGroup>Mouth</linkedBodyPartsGroup>
+      </li>
+    </verbs>
+    <race>
+      <intelligence>ToolUser</intelligence>
+      <mechanoid>false</mechanoid>
+      <thinkTree>AbilityThinkTree</thinkTree>
+      <body>AntLike</body>
+      <baseBodySize>2.0</baseBodySize>
+      <baseHealthScale>2.0</baseHealthScale>
+    </race>
+  </ThingDef>
+
+</ThingDefs>
