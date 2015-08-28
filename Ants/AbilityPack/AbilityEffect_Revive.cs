@@ -430,8 +430,10 @@ namespace AbilityPack
 			}
 			while (num2 > pawn.kindDef.maxGenerationAge || num2 < pawn.kindDef.minGenerationAge);
 			goto IL_A5;
-			IL_84:
-			Log.Warning("Didn't get age for " + pawn);
+        IL_84:
+            Log.Warning("Didn't get age for " + pawn);
+            Log.Warning("Shall make it " + (GenDate.CurrentYear - 1));
+            pawn.ageTracker.SetChronologicalBirthDate(GenDate.CurrentYear - 1, GenDate.DayOfYear);
 			return;
 			IL_95:
 			Log.Error("Tried 100 times to generate age for " + pawn);
@@ -466,6 +468,10 @@ namespace AbilityPack
 			}
 			num5 -= num7;
 			pawn.ageTracker.SetChronologicalBirthDate(num5, num6);
+            if(pawn.ageTracker == null || pawn.ageTracker.AgeBiologicalTicks == null || pawn.ageTracker.AgeChronologicalDays == null)
+            {
+                goto IL_84;
+            }
 		}
 
 		private static void GiveRandomTraitsTo(Pawn pawn)
