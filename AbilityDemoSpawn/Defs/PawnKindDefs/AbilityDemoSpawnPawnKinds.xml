@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<PawnKindDefs>
+
+  <PawnKindDef>
+    <defName>SpawnedSnake</defName>
+    <label>Spawned Snake</label>
+    <race>Demo_Spawned_Snake</race>
+    <defaultFactionType>AbilityDemoSpawnFaction</defaultFactionType>
+    <pointsCost>75</pointsCost>
+    <standardBodygraphicPath>Things/Pawn/Animal/Cobra</standardBodygraphicPath>
+    <dessicatedBodygraphicPath>Things/Pawn/Animal/CritterDessicatedSnake</dessicatedBodygraphicPath>
+    <aiAvoidCover>true</aiAvoidCover>
+    <isFighter>true</isFighter>
+  </PawnKindDef>
+  
+  <PawnKindDef>
+    <defName>SpawnedRabbit</defName>
+    <label>Spawned Rabbit</label>
+    <race>Demo_Spawned_Rabbit</race>
+    <defaultFactionType>AbilityDemoSpawnFaction</defaultFactionType>
+    <pointsCost>50</pointsCost>
+    <standardBodygraphicPath>Things/Pawn/Animal/Hare</standardBodygraphicPath>
+    <dessicatedBodygraphicPath>Things/Pawn/Animal/CritterDessicatedSmall</dessicatedBodygraphicPath>
+    <aiAvoidCover>true</aiAvoidCover>
+    <isFighter>true</isFighter>
+  </PawnKindDef>
+
+  <PawnKindDef>
+    <defName>SpawerMuffalo</defName>
+    <label>spawer muffalo</label>
+    <race>Demo_Spawner_Muffalo</race>
+    <defaultFactionType>AbilityDemoSpawnFaction</defaultFactionType>
+    <pointsCost>90</pointsCost>
+    <standardBodygraphicPath>Things/Pawn/Animal/Muffalo</standardBodygraphicPath>
+    <dessicatedBodygraphicPath>Things/Pawn/Animal/MuffaloDessicated</dessicatedBodygraphicPath>
+    <aiAvoidCover>false</aiAvoidCover>
+    <isFighter>true</isFighter>
+  </PawnKindDef>
+
+</PawnKindDefs>

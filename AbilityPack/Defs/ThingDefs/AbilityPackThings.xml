@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ThingDefs>  
+
+  <ThingDef>
+    <defName>AbilityMote_Default</defName>
+    <thingClass>AbilityPack.ThingAbilityMote_Default</thingClass>
+    <label>Test</label>
+    <category>Mote</category>
+    <drawerType>RealtimeOnly</drawerType>
+    <graphicPath>Things/Mote/defaultAbilityMote</graphicPath>
+    <graphicClass>Graphic_Single</graphicClass>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <passability>PassThroughOnly</passability>
+    <graphicOverdraw>false</graphicOverdraw>
+    <TickerType>Normal</TickerType>
+    <mote></mote>
+  </ThingDef>
+</ThingDefs>
