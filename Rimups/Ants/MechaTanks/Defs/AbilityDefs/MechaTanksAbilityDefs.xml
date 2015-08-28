@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <AbilityDef>
+    <defName>MechaTanks_EjectPilot_Ability</defName>
+    <label>Eject Pilot</label>
+    <races>
+      <li>MechaTank_MobileTank_Thing</li>
+    </races>
+    <validity Class="AbilityPack.AbilityRequeriment_Any">
+      <items>
+        <li Class="AbilityPack.AbilityRequeriment_CasterDead" />
+        <li Class="AbilityPack.AbilityRequeriment_CasterDowned" />
+      </items>
+    </validity>
+    <requeriment Class="AbilityPack.AbilityRequeriment_All">
+      <items>
+        <li Class="AbilityPack.AbilityRequeriment_ExecutedTimes">
+          <limit>1</limit>
+        </li>
+        <li Class="AbilityPack.AbilityRequeriment_TimeFixed">
+          <value>100</value>
+        </li>
+      </items>
+    </requeriment>
+    <priority Class="AbilityPack.AbilityPriority_Fixed">
+      <value>10</value>
+    </priority>
+    <target Class="AbilityPack.AbilityTarget_Self" />
+    <effect Class="AbilityPack.AbilityEffect_Random">
+      <items>
+        <li Class="AbilityPack.AbilityEffect_Spawn">
+          <range>2</range>
+          <pawnKinds>
+            <li>Pirate</li>
+          </pawnKinds>
+          <casterMote Class="AbilityPack.AbilityMote_Default" />
+        </li>
+        <li Class="AbilityPack.AbilityEffect_Spawn">
+          <range>2</range>
+          <pawnKinds>
+            <li>MercenaryGunner</li>
+          </pawnKinds>
+          <casterMote Class="AbilityPack.AbilityMote_Default" />
+        </li>
+        <li Class="AbilityPack.AbilityEffect_Spawn">
+          <range>2</range>
+          <pawnKinds>
+            <li>MercenarySniper</li>
+          </pawnKinds>
+          <casterMote Class="AbilityPack.AbilityMote_Default" />
+        </li>
+        <li Class="AbilityPack.AbilityEffect_Spawn">
+          <range>2</range>
+          <pawnKinds>
+            <li>Grenadier</li>
+          </pawnKinds>
+          <casterMote Class="AbilityPack.AbilityMote_Default" />
+        </li>
+        <li Class="AbilityPack.AbilityEffect_Spawn">
+          <range>2</range>
+          <pawnKinds>
+            <li>MercenarySlasher</li>
+          </pawnKinds>
+          <casterMote Class="AbilityPack.AbilityMote_Default" />
+        </li>
+        <li Class="AbilityPack.AbilityEffect_Spawn">
+          <range>2</range>
+          <pawnKinds>
+            <li>MercenaryHeavy</li>
+          </pawnKinds>
+          <casterMote Class="AbilityPack.AbilityMote_Default" />
+        </li>
+      </items>
+    </effect>
+  </AbilityDef>
+</Defs>
