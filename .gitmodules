@@ -4,3 +4,7 @@
 [submodule "AntsA12Buggy"]
 	path = AntsA12Buggy
 	url = https://github.com/soulkata/rimworld.git
+[submodule "<path>"]
+	ignore = dirty
+[submodule "<AntsA12Buggy>"]
+	ignore = dirty
