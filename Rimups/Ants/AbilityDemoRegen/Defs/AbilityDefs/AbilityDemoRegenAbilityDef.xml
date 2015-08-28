@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <AbilityDef>
+    <defName>MuffaloRegenSample</defName>
+    <label>Cure itself</label>
+
+    <!-- Race witch mana replenish applies (Same value of the PawnKindDef.race) --> 
+    <races>
+      <li>Demo_Regen_Muffalo</li>
+    </races>
+
+    <!-- validity: Validity is a condition that must be true can even be considered to execute, if false, the ability will stay hidden. -->
+    <validity Class="AbilityPack.AbilityRequeriment_Any">
+      <items>
+        <li Class="AbilityPack.AbilityRequeriment_CasterConscious" />
+        <li Class="AbilityPack.AbilityRequeriment_CasterDowned" />
+      </items>
+    </validity>
+
+    <!-- requeriment: Requeriment is a condition that must be true to ability execute. -->
+    <!-- AbilityPack.AbilityRequeriment_TimeFixed fixed tick -->
+    <requeriment Class="AbilityPack.AbilityRequeriment_TimeFixed">
+      <value>500</value>
+    </requeriment>
+
+    <!-- The game will execute the hight order habilitiy -->
+    <priority Class="AbilityPack.AbilityPriority_Fixed">
+      <value>10</value>
+    </priority>
+
+    <target Class="AbilityPack.AbilityTarget_Self" />
+
+    <!-- What happens when all requeriments are match -->
+    <!-- The heal effect cures the local injuries -->
+    <effect Class="AbilityPack.AbilityEffect_Heal">
+      <canBeInterrupted>false</canBeInterrupted>
+      <manaCost>30</manaCost>
+      <treatLocalInjuryPowerUse>5</treatLocalInjuryPowerUse>
+      <healLocalInjuryPowerUse>3</healLocalInjuryPowerUse>
+      <totalPower>100</totalPower>
+      <targetPower>0</targetPower>
+      <healthTrashHold>0.75</healthTrashHold>
+
+      <casterMote Class="AbilityPack.AbilityMote_Default" />
+    </effect>
+    
+  </AbilityDef>
+</Defs>
