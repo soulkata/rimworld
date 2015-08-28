@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<PawnKindDefs>
+
+  <PawnKindDef>
+    <defName>MechaTank_MobileTank_Thing</defName>
+    <label>mobile tank</label>
+    <race>MechaTank_MobileTank_Thing</race>
+    <pointsCost>200</pointsCost>
+    <defaultFactionType>Pirate</defaultFactionType>
+    <aiAvoidCover>true</aiAvoidCover>
+    <standardBodygraphicPath>Car</standardBodygraphicPath>
+    <weaponMoney>
+      <min>8000</min>
+      <max>8000</max>
+    </weaponMoney>
+    <weaponTags>
+      <li>MechanoidGunMedium</li>
+    </weaponTags>
+  </PawnKindDef>
+  
+</PawnKindDefs>

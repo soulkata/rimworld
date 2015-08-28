@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <AbilityDef>
+    <defName>MuffaloNecromantSample</defName>
+    <label>Raise dead</label>
+
+    <!-- Race witch mana replenish applies (Same value of the PawnKindDef.race) --> 
+    <races>
+      <li>Demo_Necromancer_Muffalo</li>
+    </races>
+
+    <!-- validity: Validity is a condition that must be true can even be considered to execute, if false, the ability will stay hidden. -->
+    <validity Class="AbilityPack.AbilityRequeriment_CasterConscious" />
+
+    <!-- requeriment: Requeriment is a condition that must be true to ability execute. -->
+    <!-- AbilityPack.AbilityRequeriment_TimeFixed fixed tick -->
+    <requeriment Class="AbilityPack.AbilityRequeriment_TimeFixed">
+      <value>100</value>
+    </requeriment>
+
+    <!-- The game will execute the hight order habilitiy -->
+    <priority Class="AbilityPack.AbilityPriority_Fixed">
+      <value>10</value>
+    </priority>
+
+    <!-- Targets determines the thins that the effect aplies -->
+    <!-- AbilityPack.AbilityTarget_Take limits the targes. -->
+    <target Class="AbilityPack.AbilityTarget_Take">
+      <count>1</count>
+
+      <!-- AbilityPack.AbilityTarget_Range limits the range of the targets. -->
+      <target Class="AbilityPack.AbilityTarget_Range">
+        <maximumRange>8</maximumRange>
+        <closestFirst>true</closestFirst>
+
+        <!-- AbilityTarget_ThingInCategory pics all things in category. -->
+        <target Class="AbilityPack.AbilityTarget_ThingInCategory">
+          <group>Corpse</group>
+        </target>
+      </target>
+    </target>
+
+    <!-- What happens when all requeriments are match -->
+    <!-- The heal effect cures the local injuries -->
+    <effect Class="AbilityPack.AbilityEffect_Revive">
+      <castTime>500</castTime>
+      <healUntil>0.5</healUntil>
+      <changeFaction>true</changeFaction>
+      <canBeInterrupted>true</canBeInterrupted>
+      <casterMote Class="AbilityPack.AbilityMote_Default" />
+      <targetMote Class="AbilityPack.AbilityMote_Default" />
+    </effect>
+    
+  </AbilityDef>
+</Defs>

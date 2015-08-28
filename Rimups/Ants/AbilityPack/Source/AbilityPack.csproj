@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{80F23B43-0ED9-4BB7-98D0-B0EA9DCC38D0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AbilityPack</RootNamespace>
+    <AssemblyName>AbilityPack</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\Assemblies\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\..\..\RimWorld779Win_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\..\RimWorld779Win_Data\Managed\UnityEngine.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AbilityDef.cs" />
+    <Compile Include="AbilityEffect.cs" />
+    <Compile Include="AbilityEffect_Evolve.cs" />
+    <Compile Include="AbilityEffect_Heal.cs" />
+    <Compile Include="AbilityEffect_Cast.cs" />
+    <Compile Include="AbilityEffect_Workaround_MakeCorpseProvideCover.cs" />
+    <Compile Include="AbilityEffect_Revive.cs" />
+    <Compile Include="AbilityMote.cs" />
+    <Compile Include="AbilityMote_Default.cs" />
+    <Compile Include="AbilityPriority.cs" />
+    <Compile Include="AbilityPriority_Fixed.cs" />
+    <Compile Include="AbilityRequeriment_CasterConscious.cs" />
+    <Compile Include="AbilityRequeriment_CasterDead.cs" />
+    <Compile Include="AbilityRequeriment_CasterDowned.cs" />
+    <Compile Include="AbilityRequeriment_RandomChance.cs" />
+    <Compile Include="AbilityRequeriment_ColonyBiggerThan.cs" />
+    <Compile Include="AbilityRequeriment_Target.cs" />
+    <Compile Include="AbilityRequeriment_True.cs" />
+    <Compile Include="AbilityTarget_Race.cs" />
+    <Compile Include="AbilityTarget_Range.cs" />
+    <Compile Include="AbilityTarget_SquadMembers.cs" />
+    <Compile Include="AbilityTarget_ThingInCategory.cs" />
+    <Compile Include="ITab_Pawn_Ability.cs" />
+    <Compile Include="JobDriver_AbilityEffect.cs" />
+    <Compile Include="AbilityEffect_Random.cs" />
+    <Compile Include="AbilityEffect_Spawn.cs" />
+    <Compile Include="AbilityRequeriment.cs" />
+    <Compile Include="AbilityRequeriment_All.cs" />
+    <Compile Include="AbilityRequeriment_Any.cs" />
+    <Compile Include="AbilityRequeriment_ExecutedTimes.cs" />
+    <Compile Include="AbilityRequeriment_TimeChangind.cs" />
+    <Compile Include="AbilityRequeriment_TimeFixed.cs" />
+    <Compile Include="AbilityRequeriment_ManaAbove.cs" />
+    <Compile Include="AbilityRequeriment_ManaBelow.cs" />
+    <Compile Include="AbilityTarget.cs" />
+    <Compile Include="AbilityTarget_Enemy.cs" />
+    <Compile Include="AbilityTarget_Friendly.cs" />
+    <Compile Include="AbilityTarget_Self.cs" />
+    <Compile Include="AbilityTarget_Take.cs" />
+    <Compile Include="AbilityTarget_Union.cs" />
+    <Compile Include="ManaDef.cs" />
+    <Compile Include="ManaReplenish.cs" />
+    <Compile Include="ManaReplenish_Regenerate.cs" />
+    <Compile Include="AbilityRequeriment_SquadSmallerThanColony.cs" />
+    <Compile Include="Saveable_Mote.cs" />
+    <Compile Include="Saveable_ExecutionLog.cs" />
+    <Compile Include="Saveable_Caster.cs" />
+    <Compile Include="MapComponent_Ability.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ThinkNode_StartAbility.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\About\About.xml">
+      <Link>About.xml</Link>
+    </Content>
+    <Content Include="..\Defs\JobDefs\AbilityPackJobs.xml">
+      <Link>AbilityPackJobs.xml</Link>
+    </Content>
+    <Content Include="..\Defs\ThingDefs\AbilityPackThings.xml">
+      <Link>AbilityPackThings.xml</Link>
+    </Content>
+    <Content Include="..\Defs\ThinkTreeDefs\AbilityPackThinkTree.xml">
+      <Link>AbilityPackThinkTree.xml</Link>
+    </Content>
+    <Content Include="..\Languages\English\Keyed\AbilityPack.xml">
+      <Link>AbilityPack.xml</Link>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

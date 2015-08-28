@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<PawnKindDefs>
+
+  <PawnKindDef>
+    <defName>NecromantMuffalo</defName>
+    <label>Necromancer muffalo</label>
+    <race>Demo_Necromancer_Muffalo</race>
+    <defaultFactionType>AbilityDemoNecromantFaction</defaultFactionType>
+    <pointsCost>90</pointsCost>
+    <standardBodygraphicPath>Things/Pawn/Animal/Muffalo</standardBodygraphicPath>
+    <dessicatedBodygraphicPath>Things/Pawn/Animal/MuffaloDessicated</dessicatedBodygraphicPath>
+    <aiAvoidCover>false</aiAvoidCover>
+    <isFighter>true</isFighter>
+  </PawnKindDef>
+
+</PawnKindDefs>

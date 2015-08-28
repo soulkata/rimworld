@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ThingDefs>
+
+  <ThingDef Name="BasePawn" Abstract="True">
+    <thingClass>Pawn</thingClass>
+    <category>Pawn</category>
+    <selectable>true</selectable>
+    <tickerType>Normal</tickerType>
+    <altitudeLayer>Pawn</altitudeLayer>
+    <useHitPoints>false</useHitPoints>
+    <hasTooltip>true</hasTooltip>
+    <soundImpactDefault>BulletImpactFlesh</soundImpactDefault>
+    <inspectorTabs>
+      <li>ITab_Pawn_Health</li>
+      <li>ITab_Pawn_Needs</li>
+      <li>ITab_Pawn_Character</li>
+      <li>ITab_Pawn_Gear</li>
+      <li>ITab_Pawn_Guest</li>
+      <li>ITab_Pawn_Prisoner</li>
+    </inspectorTabs>
+    <comps>
+      <li>
+        <compClass>CompAttachBase</compClass>
+      </li>
+    </comps>
+    <drawGUIOverlay>true</drawGUIOverlay>
+    <statBases>
+      <ComfyTemperatureMin>-100</ComfyTemperatureMin>
+      <ComfyTemperatureMax>250</ComfyTemperatureMax>
+    </statBases>
+    <race>
+      <needsRest>false</needsRest>
+      <diet>NeverEats</diet>
+      <isFlesh>true</isFlesh>
+      <hasLeather>false</hasLeather>
+      <hasGenders>false</hasGenders>
+      <ageGenerationCurve>
+        <points>
+          <li>
+            <loc>(1,00)</loc>
+          </li>
+          <li>
+            <loc>(10,500)</loc>
+          </li>
+          <li>
+            <loc>(20,00)</loc>
+          </li>
+        </points>
+      </ageGenerationCurve>
+    </race>
+  </ThingDef>
+      
+  <ThingDef ParentName="BasePawn">
+    <defName>Demo_Ressurect_Muffalo</defName>
+    <thingClass>Pawn</thingClass>
+    <label>reviver muffalo</label>
+    <description>A sample muffalo unit that revive another units.</description>
+    <graphicOverdraw>true</graphicOverdraw>
+    <graphicSunShadowInfo>
+      <baseWidth>0.8</baseWidth>
+      <baseHeight>0.6</baseHeight>
+      <tallness>0.6</tallness>
+    </graphicSunShadowInfo>
+    <targetHitChanceFactor>2.0</targetHitChanceFactor>
+    <statBases>
+      <MoveSpeed>2.17</MoveSpeed>
+      <Flammability>1.0</Flammability>
+      <ComfyTemperatureMin>-45</ComfyTemperatureMin>
+    </statBases>
+    <verbs>
+      <li>
+        <verbClass>Verb_MeleeAttack</verbClass>
+        <defaultCooldownTicks>100</defaultCooldownTicks>
+        <meleeDamageBaseAmount>10</meleeDamageBaseAmount>
+        <meleeDamageDef>Blunt</meleeDamageDef>
+        <linkedBodyPartsGroup>HeadAttackTool</linkedBodyPartsGroup>
+      </li>
+    </verbs>
+    <race>
+      <intelligence>ToolUser</intelligence>
+      <mechanoid>false</mechanoid>
+      <thinkTree>AbilityThinkTree</thinkTree>
+      <body>QuadrupedAnimalWithHooves</body>
+      <bodySize>1.8</bodySize>
+      <healthScale>1.5</healthScale>
+      <leatherColor>(67,103,115)</leatherColor>
+      <leatherInsulation>1.5</leatherInsulation>
+      <soundCallIntervalRange>
+        <min>3500</min>
+        <max>6000</max>
+      </soundCallIntervalRange>
+      <soundWounded>Pawn_Muffalo_Wounded</soundWounded>
+      <soundDeath>Pawn_Muffalo_Death</soundDeath>
+      <soundCall>Pawn_Muffalo_Call</soundCall>
+      <soundAngry>Pawn_Muffalo_Angry</soundAngry>
+      <soundMeleeHitPawn>Pawn_Melee_BigBash_HitPawn</soundMeleeHitPawn>
+      <soundMeleeHitBuilding>Pawn_Melee_BigBash_HitBuilding</soundMeleeHitBuilding>
+      <soundMeleeMiss>Pawn_Melee_BigBash_Miss</soundMeleeMiss>
+    </race>
+  </ThingDef>
+
+</ThingDefs>
