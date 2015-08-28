@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <JobDefs>
 
-  <JobDef>
+	<JobDef>
 		<defName>AbilityEffect_JobDef</defName>
 		<driverClass>AbilityPack.JobDriver_AbilityEffect</driverClass>
 		<reportString>Executing a custom ability.</reportString>
