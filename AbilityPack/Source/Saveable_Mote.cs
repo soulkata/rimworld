@@ -6,7 +6,7 @@ using Verse;
 
 namespace AbilityPack
 {
-    public abstract class Saveable_Mote : Saveable
+    public abstract class Saveable_Mote : IExposable
     {
         public Thing mote;
 

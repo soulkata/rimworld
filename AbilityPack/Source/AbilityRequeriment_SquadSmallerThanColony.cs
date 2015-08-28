@@ -15,7 +15,7 @@ namespace AbilityPack
             if (squad == null)
                 return true;
             else
-                return squad.ownedPawns.Sum(i => i.kindDef.pointsCost) * this.squadPowerMultiplier < AbilityRequeriment_ColonyBiggerThan.ColonySize();
+                return squad.ownedPawns.Sum(i => i.kindDef.combatPower) * this.squadPowerMultiplier < AbilityRequeriment_ColonyBiggerThan.ColonySize();
         }
     }
 }

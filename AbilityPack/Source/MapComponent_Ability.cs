@@ -167,7 +167,7 @@ namespace AbilityPack
                         {
                             AbilityDef toStartAbility;
                             List<Thing> targets;
-                            Saveable state;
+                            IExposable state;
                             if (this.TryStartNextAbility(value, out toStartAbility, out targets, out state))
                             {
                                 Saveable_ExecutionLog log = value.GetLog(toStartAbility);
@@ -182,14 +182,14 @@ namespace AbilityPack
                             {
                                 AbilityDef toStartAbility;
                                 List<Thing> targets;
-                                Saveable state;
+                                IExposable state;
                                 if (this.TryStartNextAbility(value, out toStartAbility, out targets, out state))
                                 {
                                     value.whaitingForThinkNode = true;
                                     value.currentAbility = toStartAbility;
                                     value.currentTargets = targets == null ? null : targets.Select(i => new Saveable_Target() { target = i }).ToList();
                                     value.effectState = state;
-                                    pawn.jobs.EndCurrentJob(JobCondition.OptionalInterrupt);
+                                    pawn.jobs.EndCurrentJob(JobCondition.InterruptOptional);
                                 }
                             }
                     }
@@ -370,7 +370,7 @@ namespace AbilityPack
                 return this.emptyAbilities;
         }
 
-        private bool TryStartNextAbility(Saveable_Caster value, out AbilityDef ability, out List<Thing> targets, out Saveable effectState)
+        private bool TryStartNextAbility(Saveable_Caster value, out AbilityDef ability, out List<Thing> targets, out IExposable effectState)
         {
             List<KeyValuePair<int, AbilityDef>> priorities = new List<KeyValuePair<int, AbilityDef>>();
             foreach (Saveable_ExecutionLog log in value.executionLogs)

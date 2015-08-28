@@ -10,13 +10,13 @@ namespace AbilityPack
         public AbilityMote spawnedMote;
         public int range;
 
-        public override void OnSucessfullCast(Saveable_Caster pawn, IEnumerable<Thing> targets, Saveable effectState)
+        public override void OnSucessfullCast(Saveable_Caster pawn, IEnumerable<Thing> targets, IExposable effectState)
         {
             List<Pawn> newPawns = new List<Pawn>();
             foreach (PawnKindDef pawnKind in this.pawnKinds)
             {
                 Pawn newPawn = PawnGenerator.GeneratePawn(pawnKind, pawn.pawn.Faction);
-                IntVec3 loc = GenCellFinder.RandomStandableClosewalkCellNear(pawn.pawn.Position, this.range);
+                IntVec3 loc = CellFinder.RandomClosewalkCellNear(pawn.pawn.Position, this.range);
                 GenSpawn.Spawn(newPawn, loc);
                 newPawns.Add(newPawn);
 

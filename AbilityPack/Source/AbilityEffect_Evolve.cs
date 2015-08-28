@@ -10,7 +10,7 @@ namespace AbilityPack
     {
         public List<AbilityEffect_UtilityChangeKind> items;
 
-        public override bool TryStart(AbilityDef ability, Saveable_Caster caster, ref List<Thing> target, ref Saveable effectState)
+        public override bool TryStart(AbilityDef ability, Saveable_Caster caster, ref List<Thing> target, ref IExposable effectState)
         {
             if (!base.TryStart(ability, caster, ref target, ref effectState))
                 return false;
@@ -25,7 +25,7 @@ namespace AbilityPack
             return target.Any();
         }
 
-        public override void OnSucessfullCast(Saveable_Caster caster, IEnumerable<Thing> targets, Saveable effectState)
+        public override void OnSucessfullCast(Saveable_Caster caster, IEnumerable<Thing> targets, IExposable effectState)
         {
             MapComponent_Ability component = MapComponent_Ability.GetOrCreate();
             foreach (Pawn target in targets)

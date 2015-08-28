@@ -15,7 +15,7 @@ namespace AbilityPack
         public bool changeFaction;
         public List<AbilityEffect_UtilityChangeKind> changes;
 
-        public override bool TryStart(AbilityDef ability, Saveable_Caster caster, ref List<Thing> targets, ref Saveable effectState)
+        public override bool TryStart(AbilityDef ability, Saveable_Caster caster, ref List<Thing> targets, ref IExposable effectState)
         {
             if (!base.TryStart(ability, caster, ref targets, ref effectState))
                 return false;
@@ -70,7 +70,7 @@ namespace AbilityPack
             return corpses;
         }
 
-        public override void OnSucessfullCast(Saveable_Caster caster, IEnumerable<Thing> targets, Saveable effectState)
+        public override void OnSucessfullCast(Saveable_Caster caster, IEnumerable<Thing> targets, IExposable effectState)
         {
             MapComponent_Ability component = MapComponent_Ability.GetOrCreate();
 
@@ -154,7 +154,7 @@ namespace AbilityPack
             if (pawn.RaceProps.ToolUser)
             {
                 pawn.equipment = new Pawn_EquipmentTracker(pawn);
-                pawn.carryHands = new Pawn_CarryHands(pawn);
+                pawn.carrier = new Pawn_CarryTracker(pawn);
                 pawn.apparel = new Pawn_ApparelTracker(pawn);
                 pawn.inventory = new Pawn_InventoryTracker(pawn);
             }
@@ -235,11 +235,12 @@ namespace AbilityPack
                 if (sourcePawn.inventory == null)
                     return;
 
-                while (sourcePawn.inventory.container.Contents.Any())
+                while (sourcePawn.inventory.container.Any())
                 {
-                    Thing equipment;
-                    sourcePawn.inventory.TryDrop(sourcePawn.inventory.container.Contents.First(), out equipment);
-                    pawn.inventory.container.TryAdd(equipment);
+				    Thing thing = sourcePawn.inventory.container.First();                
+                    sourcePawn.inventory.container.TransferToContainer(thing, pawn.inventory.container, thing.stackCount);
+                    //sourcePawn.inventory.container.TryDrop(sourcePawn.inventory.container.Contents.First<Thing>(), out thing);
+                    //pawn.inventory.container.TryAdd(thing);
                 }
             }
             else
@@ -308,12 +309,7 @@ namespace AbilityPack
 
         private static void GiveAppropriateBioTo_Coping(Pawn pawn, Pawn sourcePawn)
         {
-            PawnName name = default(PawnName);
-            name.first = sourcePawn.story.name.first;
-            name.last = sourcePawn.story.name.last;
-            name.nick = sourcePawn.story.name.nick;
-            name.ResolveMissingPieces();
-            pawn.story.name = name;
+            pawn.Name = sourcePawn.Name;
             pawn.story.childhood = sourcePawn.story.childhood;
             pawn.story.adulthood = sourcePawn.story.adulthood;
             pawn.story.adulthood.bodyTypeGlobal = sourcePawn.story.adulthood.bodyTypeGlobal;
@@ -344,7 +340,7 @@ namespace AbilityPack
             {
                 pawn.health.hediffSet.Clear();
                 AgeInjuryUtility.GenerateRandomOldAgeInjuries(pawn);
-                PawnArtificialBodyPartsGenerator.GeneratePartsFor(pawn);
+                PawnTechHediffsGenerator.GeneratePartsAndImplantsFor(pawn);
                 num++;
                 if (num > 10)
                 {
@@ -404,7 +400,7 @@ namespace AbilityPack
             int num3 = (int)((Game.Mode != GameMode.MapPlaying) ? (((Month)((int)MapInitData.startingMonth * 300000))) : ((Month)Find.TickManager.TicksAbs));
             long absTicks = (long)num3 - pawn.ageTracker.AgeBiologicalTicks;
             int num4 = GenDate.CalendarYearAt(absTicks);
-            int birthDayOfYear = GenDate.DayOfYearAt(absTicks);
+            int birthDayOfYear = GenDate.DayOfYearZeroBasedAt(absTicks);
             int num5;
             if (Rand.Value < pawn.kindDef.backstoryCryptosleepCommonality)
             {
@@ -496,10 +492,8 @@ namespace AbilityPack
                 }
                 for (int k = 1; k < pawn.ageTracker.AgeBiologicalYears; k++)
                 {
-                    foreach (HediffDef current in AgeInjuryUtility.HediffsToGainOnBirthday(pawn, k))
-                    {
-                        current.Worker.TryApplyBecauseOfAge(pawn);
-                    }
+                    HediffGiver_Birthday Gv = new HediffGiver_Birthday();
+                    Gv.TryApply(pawn);                    
                 }
             }
 
@@ -527,11 +521,13 @@ namespace AbilityPack
 
             private static IEnumerable<HediffDef> HediffsToGainOnBirthday(int seed, int age)
             {
-                foreach (HediffDef itm in DefDatabase<HediffDef>.AllDefsListForReading)
-                {
-                    if (itm.ageGainCurve != null && Rand.Value < itm.ageGainCurve.PeriodProbabilityFromCumulative((float)age, 1f))
-                        yield return itm;
-                }
+                Log.Warning("HediffsToGainOnBirthday");
+                yield break;
+                //foreach (HediffDef itm in DefDatabase<HediffDef>.AllDefsListForReading)
+                //{
+                //    if (itm.ageGainCurve != null && Rand.Value < itm.ageGainCurve.PeriodProbabilityFromCumulative((float)age, 1f))
+                //        yield return itm;
+                //}
             }
         }
     }

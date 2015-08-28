@@ -4,7 +4,7 @@ using Verse;
 
 namespace AbilityPack
 {
-    public class Saveable_Caster : Saveable
+    public class Saveable_Caster : IExposable
     {
         public Corpse corpse = null;
         public bool corpseTabInjected = false;
@@ -16,7 +16,7 @@ namespace AbilityPack
 
         public bool whaitingForThinkNode;
         public AbilityDef currentAbility;
-        public Saveable effectState;
+        public IExposable effectState;
         public List<Saveable_Target> currentTargets;
         public List<Saveable_Mote> currentMotes = new List<Saveable_Mote>();        
         public List<Saveable_ExecutionLog> executionLogs = new List<Saveable_ExecutionLog>();        
@@ -86,7 +86,7 @@ namespace AbilityPack
         }
     }
 
-    public class Saveable_Target : Saveable
+    public class Saveable_Target : IExposable
     {
         public Thing target;
 

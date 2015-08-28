@@ -14,7 +14,7 @@ namespace AbilityPack
         public float targetPower;
         public float healthTrashHold;
 
-        public override bool TryStart(AbilityDef ability, Saveable_Caster caster, ref List<Thing> targets, ref Saveable effectState)
+        public override bool TryStart(AbilityDef ability, Saveable_Caster caster, ref List<Thing> targets, ref IExposable effectState)
         {
             if (!base.TryStart(ability, caster, ref targets, ref effectState))
                 return false;
@@ -35,7 +35,7 @@ namespace AbilityPack
                 return false;
         }
 
-        public override void OnSucessfullCast(Saveable_Caster caster, IEnumerable<Thing> targets, Saveable effectState)
+        public override void OnSucessfullCast(Saveable_Caster caster, IEnumerable<Thing> targets, IExposable effectState)
         {
             float exceedPower = this.totalPower;
             foreach (Pawn target in targets.OfType<Pawn>())
@@ -44,15 +44,15 @@ namespace AbilityPack
 
                 if (pawnAvailPower + exceedPower >= this.treatLocalInjuryPowerUse)
                 {
-                    foreach (Hediff_Injury toTreat in target.health.hediffSet.GetInjuriesLocalTreatable().OrderByDescending(i => i.Severity))
+                    foreach (Hediff_Injury toTreat in target.health.hediffSet.GetInjuriesTreatable().OrderByDescending(i => i.Severity))
                     {
                         pawnAvailPower -= this.treatLocalInjuryPowerUse;
 
-                        HediffComp_Treatable hediffComp_Treatable = toTreat.TryGetComp<HediffComp_Treatable>();
+                        HediffComp_Tendable hediffComp_Treatable = toTreat.TryGetComp<HediffComp_Tendable>();
                         if (hediffComp_Treatable == null)
-                            Log.Error("Tried to treat " + toTreat + " which does not have a HediffComp_Treatable");
+                            Log.Error("Tried to treat " + toTreat + " which does not have a HediffComp_Tendable");
                         else
-                            hediffComp_Treatable.NewlyTreated(0.3f, null);                        
+                            hediffComp_Treatable.CompTreated(0.3f, 1);
 
                         Brain brain = caster.pawn.GetSquadBrain();
                         if ((brain != null) &&
@@ -73,7 +73,9 @@ namespace AbilityPack
 
                 if (pawnAvailPower + exceedPower >= this.healLocalInjuryPowerUse)
                 {
-                    foreach (Hediff_Injury toHeal in target.health.hediffSet.hediffs.OfType<Hediff_Injury>().Where(i => i.IsTreatedAndHealing() && (i.Severity != 0.0f)).OrderByDescending(i => i.Severity))
+                    foreach (Hediff_Injury toHeal in target.health.hediffSet.hediffs.OfType<Hediff_Injury>()
+                        .Where(i => i.IsTendedAndHealing() && (i.Severity != 0.0f))
+                        .OrderByDescending(i => i.Severity))
                     {
                         float maximum = ((pawnAvailPower + exceedPower) / this.healLocalInjuryPowerUse);
                         maximum = Math.Min(maximum, toHeal.Severity);

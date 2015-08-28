@@ -1,5 +1,6 @@
 ﻿using RimWorld;
 using System.Collections.Generic;
+using System.Linq;
 using Verse;
 using Verse.AI;
 
@@ -12,7 +13,7 @@ namespace AbilityPack
         public override IEnumerable<Thing> Targets(AbilityDef ability, Saveable_Caster pawn)
         {
             if (this.optionalSource == null)
-                return GenAI.PawnTargetsFor(pawn.pawn.Faction);
+                return GenAI.PawnTargetsFor(pawn.pawn.Faction).Cast<Thing>();
             else
                 return this.Filter(ability, pawn);
         }

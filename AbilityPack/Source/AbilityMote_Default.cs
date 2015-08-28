@@ -109,7 +109,7 @@ namespace AbilityPack
 
         public override void Draw()
         {
-            Material material = MaterialPool.MatFrom(this.def.graphicPath, ShaderDatabase.Transparent, this.saveable.currentColor);
+            Material material = MaterialPool.MatFrom(this.def.graphicData.texPath, ShaderDatabase.Transparent, this.saveable.currentColor);
             material = ThingAbilityMote_Default.FadedVersionOf(material, this.saveable.exactAlpha);
 
             UnityEngine.Matrix4x4 matrix = default(UnityEngine.Matrix4x4);

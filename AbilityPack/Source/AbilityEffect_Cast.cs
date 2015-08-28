@@ -12,15 +12,18 @@ namespace AbilityPack
         public AbilityMote casterMote;
         public AbilityMote targetMote;
 
-        public override bool TryStart(AbilityDef ability, Saveable_Caster caster, ref List<Thing> target, ref Saveable effectState) { return caster.manaValue >= this.manaCost; }
+        public override bool TryStart(AbilityDef ability, Saveable_Caster caster, ref List<Thing> target, ref IExposable effectState) { return caster.manaValue >= this.manaCost; }
 
-        public override IEnumerable<Toil> MakeNewToils(JobDriver_AbilityEffect jobDriver, Saveable_Caster caster, IEnumerable<Thing> targets, Saveable effectState)
+        public override IEnumerable<Toil> MakeNewToils(JobDriver_AbilityEffect jobDriver, Saveable_Caster caster, IEnumerable<Thing> targets, IExposable effectState)
         {
             JobDriverHolder holder = new JobDriverHolder(this, jobDriver, caster, targets, effectState);
 
             Toil toil = new Toil();
             if (this.canBeInterrupted)
-                toil.damageTakenAction = holder.OnDamageTaken;
+            {
+                Log.Warning("//toil.damageTakenAction = holder.OnDamageTaken;");
+                //toil.damageTakenAction = holder.OnDamageTaken;
+            }
 			toil.initAction = holder.OnStartCast;
 			toil.defaultCompleteMode = ToilCompleteMode.Delay;
 			toil.defaultDuration = this.castTime;
@@ -32,7 +35,7 @@ namespace AbilityPack
             yield return toil;
         }
 
-        public override void ExecuteWhileIncapacitated(Saveable_Caster caster, IEnumerable<Thing> targets, Saveable effectState)
+        public override void ExecuteWhileIncapacitated(Saveable_Caster caster, IEnumerable<Thing> targets, IExposable effectState)
         {
             this.StartCast(caster, targets);
             this.OnSucessfullCast(caster, targets, effectState);
@@ -52,17 +55,17 @@ namespace AbilityPack
             }
         }
 
-        public abstract void OnSucessfullCast(Saveable_Caster caster, IEnumerable<Thing> targets, Saveable effectState);
+        public abstract void OnSucessfullCast(Saveable_Caster caster, IEnumerable<Thing> targets, IExposable effectState);
 
         class JobDriverHolder
         {
             public AbilityEffect_Cast owner;
             public JobDriver_AbilityEffect jobDriver;
             public IEnumerable<Thing> targets;
-            public Saveable effectState;
+            public IExposable effectState;
             public Saveable_Caster caster;
 
-            public JobDriverHolder(AbilityEffect_Cast owner, JobDriver_AbilityEffect jobDriver, Saveable_Caster caster, IEnumerable<Thing> targets, Saveable effectState)
+            public JobDriverHolder(AbilityEffect_Cast owner, JobDriver_AbilityEffect jobDriver, Saveable_Caster caster, IEnumerable<Thing> targets, IExposable effectState)
             {
                 this.owner = owner;
                 this.jobDriver = jobDriver;
@@ -79,9 +82,9 @@ namespace AbilityPack
 
             public void OnDamageTaken(DamageInfo damage)
             {
-                if (damage.Def.interruptJobs)
+                if (damage.Def.canInterruptJobs)
                 {
-                    this.jobDriver.EndJobWith(JobCondition.OptionalInterrupt);
+                    this.jobDriver.EndJobWith(JobCondition.InterruptOptional);
                     this.caster.NotifyCompleted(false);
                 }
             }

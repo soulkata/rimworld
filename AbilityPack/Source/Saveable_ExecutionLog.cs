@@ -2,7 +2,7 @@
 
 namespace AbilityPack
 {
-    public class Saveable_ExecutionLog : Saveable
+    public class Saveable_ExecutionLog : IExposable
     {
         public AbilityDef ability;
         public int numberOfExecution;
