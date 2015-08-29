@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AbilityPack", "AbilityPack\Source\AbilityPack.csproj", "{80F23B43-0ED9-4BB7-98D0-B0EA9DCC38D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlienAnts", "AlienAnts\Source\AlienAnts.csproj", "{67FA08A1-2039-4525-9E3E-F2E684317F6F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{80F23B43-0ED9-4BB7-98D0-B0EA9DCC38D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80F23B43-0ED9-4BB7-98D0-B0EA9DCC38D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80F23B43-0ED9-4BB7-98D0-B0EA9DCC38D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67FA08A1-2039-4525-9E3E-F2E684317F6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67FA08A1-2039-4525-9E3E-F2E684317F6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67FA08A1-2039-4525-9E3E-F2E684317F6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67FA08A1-2039-4525-9E3E-F2E684317F6F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
