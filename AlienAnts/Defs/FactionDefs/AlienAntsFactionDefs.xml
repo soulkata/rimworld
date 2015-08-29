@@ -19,39 +19,34 @@
       <min>-100</min>
       <max>-100</max>
     </startingGoodwill>
+    <mustStartOneEnemy>true</mustStartOneEnemy>
     <naturalColonyGoodwill>
       <min>-100</min>
       <max>-100</max>
     </naturalColonyGoodwill>
     <pawnGroupMakers>
       <li>
-        <spawnGroups>
+        <options>
           <li>
             <selectionWeight>10</selectionWeight>
-            <kinds>
-              <li>AntWorker</li>
-            </kinds>
+            <kind>AntWorker</kind>
           </li>
           <li>
             <selectionWeight>20</selectionWeight>
-            <kinds>
-              <li>AntWarrior</li>
-            </kinds>
+            <kind>AntWarrior</kind>
           </li>
           <li>
             <selectionWeight>20</selectionWeight>
-            <kinds>
-              <li>AntStinger</li>
-            </kinds>
+            <kind>AntStinger</kind>
           </li>
           <li>
             <selectionWeight>10</selectionWeight>
-            <kinds>
-              <li>AntNurse</li>
-            </kinds>
+            <kind>AntNurse</kind>
           </li>
-        </spawnGroups>
+        </options>
       </li>
     </pawnGroupMakers>
+    <homeIconPath>World/FactionHomes/DefaultHome</homeIconPath>
+    <homeIconColor>(150,150,150)</homeIconColor>
   </FactionDef>
 </FactionDefs>

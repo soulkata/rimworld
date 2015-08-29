@@ -1,8 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ThingDefs>
+<Defs>
   
-  <ThingDef Name="BasePawn" Abstract="True">
+  <ThingDef>
+    <defName>Demo_Spawned_Snake</defName>
     <thingClass>Pawn</thingClass>
+    <label>snake created by spawn</label>
+    <description>A sample snake unit created by spawn ability.</description>
     <category>Pawn</category>
     <selectable>true</selectable>
     <tickerType>Normal</tickerType>
@@ -14,6 +17,7 @@
       <li>ITab_Pawn_Health</li>
       <li>ITab_Pawn_Needs</li>
       <li>ITab_Pawn_Character</li>
+      <li>ITab_Pawn_Training</li>
       <li>ITab_Pawn_Gear</li>
       <li>ITab_Pawn_Guest</li>
       <li>ITab_Pawn_Prisoner</li>
@@ -25,41 +29,10 @@
     </comps>
     <drawGUIOverlay>true</drawGUIOverlay>
     <statBases>
+      <MoveSpeed>2.17</MoveSpeed>
+      <Flammability>1.0</Flammability>
       <ComfyTemperatureMin>-100</ComfyTemperatureMin>
       <ComfyTemperatureMax>250</ComfyTemperatureMax>
-    </statBases>
-    <race>
-      <needsRest>false</needsRest>
-      <diet>NeverEats</diet>
-      <isFlesh>true</isFlesh>
-      <hasLeather>false</hasLeather>
-      <hasGenders>false</hasGenders>      
-      <ageGenerationCurve>
-        <points>
-          <li>
-            <loc>(1,00)</loc>
-          </li>
-          <li>
-            <loc>(10,500)</loc>
-          </li>
-          <li>
-            <loc>(20,00)</loc>
-          </li>
-        </points>
-      </ageGenerationCurve>
-    </race>
-  </ThingDef>
-
-  <ThingDef ParentName="BasePawn">
-    <defName>Demo_Spawned_Snake</defName>
-    <label>snake created by spawn</label>
-    <description>A sample snake unit created by spawn ability.</description>
-    <graphicOverdraw>false</graphicOverdraw>
-    <targetHitChanceFactor>0.4</targetHitChanceFactor>
-    <statBases>
-      <MoveSpeed>4.84</MoveSpeed>
-      <Flammability>1.0</Flammability>
-      <ComfyTemperatureMin>-5</ComfyTemperatureMin>
     </statBases>
     <verbs>
       <li>
@@ -71,39 +44,84 @@
       </li>
     </verbs>
     <race>
+      <thinkTree>AbilityThinkTree</thinkTree>
       <intelligence>ToolUser</intelligence>
       <mechanoid>false</mechanoid>
-      <thinkTree>AbilityThinkTree</thinkTree>
-      <body>Snake</body>
-      <hungerRate>0.3</hungerRate>
-      <body>Snake</body>
-      <bodySize>0.2</bodySize>
-      <healthScale>0.78</healthScale>
-      <diet>Omnivorous</diet>
-      <leatherColor>(113,98,87)</leatherColor>
-      <leatherLabel>cobraskin</leatherLabel>
-      <leatherInsulation>0.75</leatherInsulation>
-      <meatLabel>cobraflesh</meatLabel>
-      <soundWounded>Pawn_Cobra_Wounded</soundWounded>
-      <soundDeath>Pawn_Cobra_Death</soundDeath>
-      <soundCall>Pawn_Cobra_Call</soundCall>
-      <soundAngry>Pawn_Cobra_Angry</soundAngry>
-      <soundMeleeHitPawn>Pawn_Melee_SmallScratch_HitPawn</soundMeleeHitPawn>
-      <soundMeleeHitBuilding>Pawn_Melee_SmallScratch_HitBuilding</soundMeleeHitBuilding>
-      <soundMeleeMiss>Pawn_Melee_SmallScratch_Miss</soundMeleeMiss>
+      <body>QuadrupedAnimalWithHooves</body>
+      <baseBodySize>2.0</baseBodySize>
+      <baseHealthScale>1.75</baseHealthScale>
+      <diet>Herbivorous</diet>
+      <leatherColor>(67,103,115)</leatherColor>
+      <leatherInsulation>1.5</leatherInsulation>
+      <gestationPeriodDays>60</gestationPeriodDays>
+      <wildness>0.5</wildness>
+      <nuzzleChancePerHour>0.01</nuzzleChancePerHour>
+      <lifeExpectancy>15</lifeExpectancy>
+      <lifeStageAges>
+        <li>
+          <def>AnimalBaby</def>
+          <minAge>0</minAge>
+        </li>
+        <li>
+          <def>AnimalJuvenile</def>
+          <minAge>0.25</minAge>
+        </li>
+        <li>
+          <def>AnimalAdult</def>
+          <minAge>1</minAge>
+          <soundWounded>Pawn_Muffalo_Wounded</soundWounded>
+          <soundDeath>Pawn_Muffalo_Death</soundDeath>
+          <soundCall>Pawn_Muffalo_Call</soundCall>
+          <soundAngry>Pawn_Muffalo_Angry</soundAngry>
+        </li>
+      </lifeStageAges>
+      <soundMeleeHitPawn>Pawn_Melee_BigBash_HitPawn</soundMeleeHitPawn>
+      <soundMeleeHitBuilding>Pawn_Melee_BigBash_HitBuilding</soundMeleeHitBuilding>
+      <soundMeleeMiss>Pawn_Melee_BigBash_Miss</soundMeleeMiss>
+      <minFoodPreferability>Plant</minFoodPreferability>
+      <isFlesh>true</isFlesh>
+      <hasGenders>true</hasGenders>
+      <nameGenerator>NamerAnimalGeneric</nameGenerator>
+      <manhunterOnDamageChance>0.0125</manhunterOnDamageChance>
+      <nameOnNuzzleChance>0.5</nameOnNuzzleChance>
+      <hediffGiverSets>
+        <li>OrganicStandard</li>
+      </hediffGiverSets>
     </race>
   </ThingDef>
 
-  <ThingDef ParentName="BasePawn">
+  <ThingDef>
     <defName>Demo_Spawned_Rabbit</defName>
+    <thingClass>Pawn</thingClass>
     <label>rabbit created by spawn</label>
     <description>A sample rabit unit created by spawn ability.</description>
-    <graphicOverdraw>false</graphicOverdraw>
-    <targetHitChanceFactor>0.6</targetHitChanceFactor>
+    <category>Pawn</category>
+    <selectable>true</selectable>
+    <tickerType>Normal</tickerType>
+    <altitudeLayer>Pawn</altitudeLayer>
+    <useHitPoints>false</useHitPoints>
+    <hasTooltip>true</hasTooltip>
+    <soundImpactDefault>BulletImpactFlesh</soundImpactDefault>
+    <inspectorTabs>
+      <li>ITab_Pawn_Health</li>
+      <li>ITab_Pawn_Needs</li>
+      <li>ITab_Pawn_Character</li>
+      <li>ITab_Pawn_Training</li>
+      <li>ITab_Pawn_Gear</li>
+      <li>ITab_Pawn_Guest</li>
+      <li>ITab_Pawn_Prisoner</li>
+    </inspectorTabs>
+    <comps>
+      <li>
+        <compClass>CompAttachBase</compClass>
+      </li>
+    </comps>
+    <drawGUIOverlay>true</drawGUIOverlay>
     <statBases>
-      <MoveSpeed>5.5</MoveSpeed>
+      <MoveSpeed>2.17</MoveSpeed>
       <Flammability>1.0</Flammability>
-      <ComfyTemperatureMin>-30</ComfyTemperatureMin>
+      <ComfyTemperatureMin>-100</ComfyTemperatureMin>
+      <ComfyTemperatureMax>250</ComfyTemperatureMax>
     </statBases>
     <verbs>
       <li>
@@ -115,42 +133,84 @@
       </li>
     </verbs>
     <race>
+      <thinkTree>AbilityThinkTree</thinkTree>
       <intelligence>ToolUser</intelligence>
       <mechanoid>false</mechanoid>
-      <thinkTree>AbilityThinkTree</thinkTree>
-      <hungerRate>0.4</hungerRate>
-      <body>QuadrupedAnimalWithPawsAndTail</body>
-      <bodySize>0.2</bodySize>
-      <healthScale>0.5</healthScale>
+      <body>QuadrupedAnimalWithHooves</body>
+      <baseBodySize>2.0</baseBodySize>
+      <baseHealthScale>1.75</baseHealthScale>
       <diet>Herbivorous</diet>
-      <leatherColor>(131,128,108)</leatherColor>
-      <leatherInsulation>1.2</leatherInsulation>
-      <soundWounded>Pawn_Hare_Wounded</soundWounded>
-      <soundDeath>Pawn_Hare_Death</soundDeath>
-      <soundCall>Pawn_Hare_Call</soundCall>
-      <soundAngry>Pawn_Hare_Angry</soundAngry>
-      <soundMeleeHitPawn>Pawn_Melee_SmallScratch_HitPawn</soundMeleeHitPawn>
-      <soundMeleeHitBuilding>Pawn_Melee_SmallScratch_HitBuilding</soundMeleeHitBuilding>
-      <soundMeleeMiss>Pawn_Melee_SmallScratch_Miss</soundMeleeMiss>
+      <leatherColor>(67,103,115)</leatherColor>
+      <leatherInsulation>1.5</leatherInsulation>
+      <gestationPeriodDays>60</gestationPeriodDays>
+      <wildness>0.5</wildness>
+      <nuzzleChancePerHour>0.01</nuzzleChancePerHour>
+      <lifeExpectancy>15</lifeExpectancy>
+      <lifeStageAges>
+        <li>
+          <def>AnimalBaby</def>
+          <minAge>0</minAge>
+        </li>
+        <li>
+          <def>AnimalJuvenile</def>
+          <minAge>0.25</minAge>
+        </li>
+        <li>
+          <def>AnimalAdult</def>
+          <minAge>1</minAge>
+          <soundWounded>Pawn_Muffalo_Wounded</soundWounded>
+          <soundDeath>Pawn_Muffalo_Death</soundDeath>
+          <soundCall>Pawn_Muffalo_Call</soundCall>
+          <soundAngry>Pawn_Muffalo_Angry</soundAngry>
+        </li>
+      </lifeStageAges>
+      <soundMeleeHitPawn>Pawn_Melee_BigBash_HitPawn</soundMeleeHitPawn>
+      <soundMeleeHitBuilding>Pawn_Melee_BigBash_HitBuilding</soundMeleeHitBuilding>
+      <soundMeleeMiss>Pawn_Melee_BigBash_Miss</soundMeleeMiss>
+      <minFoodPreferability>Plant</minFoodPreferability>
+      <isFlesh>true</isFlesh>
+      <hasGenders>true</hasGenders>
+      <nameGenerator>NamerAnimalGeneric</nameGenerator>
+      <manhunterOnDamageChance>0.0125</manhunterOnDamageChance>
+      <nameOnNuzzleChance>0.5</nameOnNuzzleChance>
+      <hediffGiverSets>
+        <li>OrganicStandard</li>
+      </hediffGiverSets>
     </race>
   </ThingDef>
       
-  <ThingDef ParentName="BasePawn">
+  <ThingDef>
     <defName>Demo_Spawner_Muffalo</defName>
     <thingClass>Pawn</thingClass>
     <label>muffalo that spawn snakes and rabits</label>
     <description>A sample muffalo unit wich spawn snakes and rabits.</description>
-    <graphicOverdraw>true</graphicOverdraw>
-    <graphicSunShadowInfo>
-      <baseWidth>0.8</baseWidth>
-      <baseHeight>0.6</baseHeight>
-      <tallness>0.6</tallness>
-    </graphicSunShadowInfo>
-    <targetHitChanceFactor>2.0</targetHitChanceFactor>
+    <category>Pawn</category>
+    <selectable>true</selectable>
+    <tickerType>Normal</tickerType>
+    <altitudeLayer>Pawn</altitudeLayer>
+    <useHitPoints>false</useHitPoints>
+    <hasTooltip>true</hasTooltip>
+    <soundImpactDefault>BulletImpactFlesh</soundImpactDefault>
+    <inspectorTabs>
+      <li>ITab_Pawn_Health</li>
+      <li>ITab_Pawn_Needs</li>
+      <li>ITab_Pawn_Character</li>
+      <li>ITab_Pawn_Training</li>
+      <li>ITab_Pawn_Gear</li>
+      <li>ITab_Pawn_Guest</li>
+      <li>ITab_Pawn_Prisoner</li>
+    </inspectorTabs>
+    <comps>
+      <li>
+        <compClass>CompAttachBase</compClass>
+      </li>
+    </comps>
+    <drawGUIOverlay>true</drawGUIOverlay>
     <statBases>
       <MoveSpeed>2.17</MoveSpeed>
       <Flammability>1.0</Flammability>
-      <ComfyTemperatureMin>-45</ComfyTemperatureMin>
+      <ComfyTemperatureMin>-100</ComfyTemperatureMin>
+      <ComfyTemperatureMax>250</ComfyTemperatureMax>
     </statBases>
     <verbs>
       <li>
@@ -162,26 +222,50 @@
       </li>
     </verbs>
     <race>
+      <thinkTree>AbilityThinkTree</thinkTree>
       <intelligence>ToolUser</intelligence>
       <mechanoid>false</mechanoid>
-      <thinkTree>AbilityThinkTree</thinkTree>
       <body>QuadrupedAnimalWithHooves</body>
-      <bodySize>1.8</bodySize>
-      <healthScale>1.5</healthScale>
+      <baseBodySize>2.0</baseBodySize>
+      <baseHealthScale>1.75</baseHealthScale>
+      <diet>Herbivorous</diet>
       <leatherColor>(67,103,115)</leatherColor>
       <leatherInsulation>1.5</leatherInsulation>
-      <soundCallIntervalRange>
-        <min>3500</min>
-        <max>6000</max>
-      </soundCallIntervalRange>
-      <soundWounded>Pawn_Muffalo_Wounded</soundWounded>
-      <soundDeath>Pawn_Muffalo_Death</soundDeath>
-      <soundCall>Pawn_Muffalo_Call</soundCall>
-      <soundAngry>Pawn_Muffalo_Angry</soundAngry>
+      <gestationPeriodDays>60</gestationPeriodDays>
+      <wildness>0.5</wildness>
+      <nuzzleChancePerHour>0.01</nuzzleChancePerHour>
+      <lifeExpectancy>15</lifeExpectancy>
+      <lifeStageAges>
+        <li>
+          <def>AnimalBaby</def>
+          <minAge>0</minAge>
+        </li>
+        <li>
+          <def>AnimalJuvenile</def>
+          <minAge>0.25</minAge>
+        </li>
+        <li>
+          <def>AnimalAdult</def>
+          <minAge>1</minAge>
+          <soundWounded>Pawn_Muffalo_Wounded</soundWounded>
+          <soundDeath>Pawn_Muffalo_Death</soundDeath>
+          <soundCall>Pawn_Muffalo_Call</soundCall>
+          <soundAngry>Pawn_Muffalo_Angry</soundAngry>
+        </li>
+      </lifeStageAges>
       <soundMeleeHitPawn>Pawn_Melee_BigBash_HitPawn</soundMeleeHitPawn>
       <soundMeleeHitBuilding>Pawn_Melee_BigBash_HitBuilding</soundMeleeHitBuilding>
       <soundMeleeMiss>Pawn_Melee_BigBash_Miss</soundMeleeMiss>
+      <minFoodPreferability>Plant</minFoodPreferability>
+      <isFlesh>true</isFlesh>
+      <hasGenders>true</hasGenders>
+      <nameGenerator>NamerAnimalGeneric</nameGenerator>
+      <manhunterOnDamageChance>0.0125</manhunterOnDamageChance>
+      <nameOnNuzzleChance>0.5</nameOnNuzzleChance>
+      <hediffGiverSets>
+        <li>OrganicStandard</li>
+      </hediffGiverSets>
     </race>
   </ThingDef>
 
-</ThingDefs>
+</Defs>
