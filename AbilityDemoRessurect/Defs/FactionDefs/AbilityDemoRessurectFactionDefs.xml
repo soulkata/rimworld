@@ -22,21 +22,22 @@
       <min>-100</min>
       <max>-100</max>
     </startingGoodwill>
+    <mustStartOneEnemy>true</mustStartOneEnemy>
     <naturalColonyGoodwill>
       <min>-100</min>
       <max>-100</max>
     </naturalColonyGoodwill>
     <pawnGroupMakers>
       <li>
-        <spawnGroups>
+        <options>
           <li>
             <selectionWeight>10</selectionWeight>
-            <kinds>
-              <li>RessurectMuffalo</li>
-            </kinds>
+            <kind>RessurectMuffalo</kind>
           </li>
-        </spawnGroups>
+        </options>
       </li>
     </pawnGroupMakers>
+    <homeIconPath>World/FactionHomes/DefaultHome</homeIconPath>
+    <homeIconColor>(150,150,150)</homeIconColor>
   </FactionDef>
 </FactionDefs>

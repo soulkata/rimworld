@@ -155,11 +155,6 @@ namespace AbilityPack
             pawn.needs = new Pawn_NeedsTracker(pawn);
             pawn.stances = new Pawn_StanceTracker(pawn);
 
-            //(p.stances != null && &&  && );
-            // p.mindState != null 
-            // p.needs != null
-            // p.ageTracker != null
-
             if (pawn.RaceProps.ToolUser)
             {
                 pawn.equipment = new Pawn_EquipmentTracker(pawn);
@@ -195,7 +190,7 @@ namespace AbilityPack
                 }
             }
             else
-                pawn.gender = Gender.None;
+                pawn.gender = Gender.None;            
 
             AbilityEffect_Revive.GenerateRandomAge_Coping(pawn, sourcePawn);
             AbilityEffect_Revive.GenerateInitialHediffs_Coping(pawn, sourcePawn);
@@ -227,7 +222,8 @@ namespace AbilityPack
                     AbilityEffect_Revive.GiveRandomTraitsTo(pawn);
                     pawn.story.GenerateSkillsFromBackstory();
                 }
-            }
+            }                       
+            
             AbilityEffect_Revive.GenerateStartingApparelFor_Coping(pawn, sourcePawn, forceApparel);
             AbilityEffect_Revive.TryGenerateWeaponFor_Coping(pawn, sourcePawn, forceWeapon);
             AbilityEffect_Revive.GenerateInventoryFor_Coping(pawn, sourcePawn);
@@ -344,76 +340,9 @@ namespace AbilityPack
 
         private static void GenerateRandomAge_Coping(Pawn pawn, Pawn sourcePawn)
         {
-            AbilityEffect_Revive.GenerateRandomAge(pawn);
-        }
-
-        private static void GenerateRandomAge(Pawn pawn)
-        {
-            int num = 0;
-            int num2;
-            while (true)
-            {
-                if (pawn.RaceProps.ageGenerationCurve != null)
-                {
-                    num2 = Mathf.RoundToInt(Rand.ByCurve(pawn.RaceProps.ageGenerationCurve, 200));
-                }
-                else if (pawn.RaceProps.mechanoid)
-                {
-                    num2 = Rand.Range(0, 2500);
-                }
-                else
-                {
-                    if (!pawn.RaceProps.Animal)
-                    {
-                        break;
-                    }
-                    num2 = Rand.Range(1, 10);
-                }
-                num++;
-                if (num > 100)
-                {
-                    goto Block_4;
-                }
-                if (num2 <= pawn.kindDef.maxGenerationAge && num2 >= pawn.kindDef.minGenerationAge)
-                {
-                    goto IL_C7;
-                }
-            }
-            Log.Warning("Didn't get age for " + pawn);
-            return;
-        Block_4:
-            Log.Error("Tried 100 times to generate age for " + pawn);
-        IL_C7:
-            pawn.ageTracker.AgeBiologicalTicks = (long)num2 * 3600000L + (long)Rand.Range(0, 3600000);
-            int num3 = (int)((Game.Mode != GameMode.MapPlaying) ? (((Month)((int)MapInitData.startingMonth * 300000))) : ((Month)Find.TickManager.TicksAbs));
-            long absTicks = (long)num3 - pawn.ageTracker.AgeBiologicalTicks;
-            int num4 = GenDate.CalendarYearAt(absTicks);
-            int birthDayOfYear = GenDate.DayOfYearZeroBasedAt(absTicks);
-            int num5;
-            if (Rand.Value < pawn.kindDef.backstoryCryptosleepCommonality)
-            {
-                float value = UnityEngine.Random.value;
-                if (value < 0.7f)
-                {
-                    num5 = UnityEngine.Random.Range(0, 100);
-                }
-                else if (value < 0.95f)
-                {
-                    num5 = UnityEngine.Random.Range(100, 1000);
-                }
-                else
-                {
-                    int max = GenDate.CurrentYear - 2026 - pawn.ageTracker.AgeBiologicalYears;
-                    num5 = UnityEngine.Random.Range(1000, max);
-                }
-            }
-            else
-            {
-                num5 = 0;
-            }
-            num4 -= num5;
-            pawn.ageTracker.SetChronologicalBirthDate(num4, birthDayOfYear);
-        }
+            pawn.ageTracker.AgeBiologicalTicks = sourcePawn.ageTracker.AgeBiologicalTicks;
+            pawn.ageTracker.SetChronologicalBirthDate(sourcePawn.ageTracker.BirthYear, sourcePawn.ageTracker.BirthDayOfYear);
+        }        
 
         private static void GiveRandomTraitsTo(Pawn pawn)
         {
