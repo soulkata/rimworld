@@ -1,9 +1,0 @@
-C:\Users\ahmed_000\Desktop\Rimups\Ants\AbilityPack\bin\Release\AbilityPack.dll
-C:\Users\ahmed_000\Desktop\Rimups\Ants\AbilityPack\bin\Release\AbilityPack.pdb
-C:\Users\ahmed_000\Desktop\Rimups\Ants\AbilityPack\obj\Release\AbilityPack.csprojResolveAssemblyReference.cache
-C:\Users\ahmed_000\Desktop\Rimups\Ants\AbilityPack\obj\Release\AbilityPack.dll
-C:\Users\ahmed_000\Desktop\Rimups\Ants\AbilityPack\obj\Release\AbilityPack.pdb
-C:\Users\ahmed_000\Documents\GitHub\rimworld\Ants\AbilityPack\bin\Release\AbilityPack.dll
-C:\Users\ahmed_000\Documents\GitHub\rimworld\Ants\AbilityPack\bin\Release\AbilityPack.pdb
-C:\Users\ahmed_000\Documents\GitHub\rimworld\Ants\AbilityPack\obj\Release\AbilityPack.dll
-C:\Users\ahmed_000\Documents\GitHub\rimworld\Ants\AbilityPack\obj\Release\AbilityPack.pdb
