@@ -194,3 +194,13 @@ RimWorld911Win_Data/resources.assets
 RimWorld911Win_Data/resources.assets.resS
 RimWorld911Win_Data/Resources/unity default resources
 RimWorld911Win_Data/Resources/unity_builtin_extra
+AlienAnts/Assemblies/UnityEngine.dll
+Mods/AbilityPack/Assemblies/UnityEngine.dll
+AlienAnts/Assemblies/AlienAnts.dll
+AlienAnts/Assemblies/Assembly-CSharp.dll
+Mods/AbilityPack/Assemblies/AbilityPack.dll
+Mods/AbilityPack/Assemblies/Assembly-CSharp-firstpass.dll
+Mods/AbilityPack/Assemblies/Assembly-CSharp.dll
+Mods/AbilityPack/Assemblies/Boo.Lang.dll
+Mods/AbilityPack/Assemblies/UnityScript.Lang.dll
+Mods/AbilityPack/Assemblies/Assembly-UnityScript-firstpass.dll
