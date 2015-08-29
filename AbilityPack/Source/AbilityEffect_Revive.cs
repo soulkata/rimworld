@@ -197,8 +197,7 @@ namespace AbilityPack
             if (pawn.RaceProps.Humanlike)
             {
                 if ((sourcePawn != null) &&
-                    ((forceBodyVisual) ||
-                     (sourcePawn.def == sourcePawn.def)))
+                    (forceBodyVisual))
                 {
                     pawn.story.skinColor = sourcePawn.story.skinColor;
                     pawn.story.crownType = sourcePawn.story.crownType;
