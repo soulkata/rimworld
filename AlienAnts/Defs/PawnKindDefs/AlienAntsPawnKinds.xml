@@ -5,7 +5,7 @@
     <defName>AntEgg</defName>
     <label>ant egg</label>
     <race>Ant_Egg</race>
-    <pointsCost>10</pointsCost>
+    <combatPower>10</combatPower>
     <defaultFactionType>AlienAnts</defaultFactionType>
     <aiAvoidCover>false</aiAvoidCover>
     <isFighter>false</isFighter>
@@ -16,7 +16,7 @@
     <defName>AntWorker</defName>
     <label>ant worker</label>
     <race>Ant_Worker</race>
-    <pointsCost>60</pointsCost>
+    <combatPower>60</combatPower>
     <defaultFactionType>AlienAnts</defaultFactionType>
     <aiAvoidCover>false</aiAvoidCover>
     <isFighter>true</isFighter>
@@ -27,7 +27,7 @@
     <defName>AntWarrior</defName>
     <label>ant warrior</label>
     <race>Ant_Warrior</race>
-    <pointsCost>140</pointsCost>
+    <combatPower>140</combatPower>
     <defaultFactionType>AlienAnts</defaultFactionType>
     <aiAvoidCover>true</aiAvoidCover>
     <isFighter>true</isFighter>
@@ -38,7 +38,7 @@
     <defName>AntStinger</defName>
     <label>ant stinger</label>
     <race>Ant_Stinger</race>
-    <pointsCost>140</pointsCost>
+    <combatPower>140</combatPower>
     <defaultFactionType>AlienAnts</defaultFactionType>
     <aiAvoidCover>false</aiAvoidCover>
     <isFighter>true</isFighter>
@@ -56,7 +56,7 @@
     <defName>AntNurse</defName>
     <label>ant nurse</label>
     <race>Ant_Nurse</race>
-    <pointsCost>140</pointsCost>
+    <combatPower>140</combatPower>
     <defaultFactionType>AlienAnts</defaultFactionType>
     <aiAvoidCover>false</aiAvoidCover>
     <isFighter>true</isFighter>
@@ -74,7 +74,7 @@
     <defName>AntPrincess</defName>
     <label>ant princess</label>
     <race>Ant_Princess</race>
-    <pointsCost>100</pointsCost>
+    <combatPower>100</combatPower>
     <defaultFactionType>AlienAnts</defaultFactionType>
     <aiAvoidCover>false</aiAvoidCover>
     <isFighter>false</isFighter>
@@ -92,7 +92,7 @@
     <defName>AntQueen</defName>
     <label>ant queen</label>
     <race>Ant_Queen</race>
-    <pointsCost>390</pointsCost>
+    <combatPower>390</combatPower>
     <defaultFactionType>AlienAnts</defaultFactionType>
     <aiAvoidCover>false</aiAvoidCover>
     <isFighter>false</isFighter>
