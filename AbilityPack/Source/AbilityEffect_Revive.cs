@@ -1,8 +1,10 @@
 ﻿using RimWorld;
 using RimWorld.SquadAI;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using UnityEngine;
 using Verse;
 using Verse.AI;
@@ -151,6 +153,13 @@ namespace AbilityPack
             pawn.mindState = new Pawn_MindState(pawn);
             pawn.filth = new Pawn_FilthTracker(pawn);
             pawn.needs = new Pawn_NeedsTracker(pawn);
+            pawn.stances = new Pawn_StanceTracker(pawn);
+
+            //(p.stances != null && &&  && );
+            // p.mindState != null 
+            // p.needs != null
+            // p.ageTracker != null
+
             if (pawn.RaceProps.ToolUser)
             {
                 pawn.equipment = new Pawn_EquipmentTracker(pawn);
@@ -330,29 +339,8 @@ namespace AbilityPack
 
         private static void GenerateInitialHediffs_Coping(Pawn pawn, Pawn sourcePawn)
         {
-            GenerateInitialHediffs(pawn);
-        }
-
-        private static void GenerateInitialHediffs(Pawn pawn)
-        {
-            int num = 0;
-            while (true)
-            {
-                pawn.health.hediffSet.Clear();
-                AgeInjuryUtility.GenerateRandomOldAgeInjuries(pawn);
-                PawnTechHediffsGenerator.GeneratePartsAndImplantsFor(pawn);
-                num++;
-                if (num > 10)
-                {
-                    break;
-                }
-                if (pawn.health.capacities.CapableOf(PawnCapacityDefOf.Moving))
-                {
-                    return;
-                }
-            }
-            Log.Error("Could not generate old age injuries that allow pawn to move: " + pawn);
-        }
+            //GenerateInitialHediffs(pawn);
+        }        
 
         private static void GenerateRandomAge_Coping(Pawn pawn, Pawn sourcePawn)
         {
@@ -457,78 +445,208 @@ namespace AbilityPack
             }
         }
 
-        internal static class AgeInjuryUtility
-        {
-            public static void GenerateRandomOldAgeInjuries(Pawn pawn)
-            {
-                int num = 0;
-                for (int i = 10; i < pawn.ageTracker.AgeBiologicalYears; i += 10)
-                {
-                    if (Rand.Value < 0.15f)
-                    {
-                        num++;
-                    }
-                }
-                for (int j = 0; j < num; j++)
-                {
-                    DamageDef dam = AgeInjuryUtility.RandomOldInjuryDamageType();
-                    int num2 = Rand.RangeInclusive(2, 6);
-                    IEnumerable<BodyPartRecord> source =
-                        from x in pawn.health.hediffSet.GetNotMissingParts(null, null)
-                        where x.depth == BodyPartDepth.Outside && !Mathf.Approximately(x.def.oldInjuryBaseChance, 0f) && !pawn.health.hediffSet.PartOrAnyAncestorHasDirectlyAddedParts(x)
-                        select x;
-                    if (source.Any<BodyPartRecord>())
-                    {
-                        BodyPartRecord bodyPartRecord = source.RandomElementByWeight((BodyPartRecord x) => x.absoluteFleshCoverage);
-                        HediffDef hediffDefFromDamage = HealthUtility.GetHediffDefFromDamage(dam, pawn, bodyPartRecord);
-                        if (bodyPartRecord.def.oldInjuryBaseChance > 0f && hediffDefFromDamage.CompPropsFor(typeof(HediffComp_GetsOld)) != null)
-                        {
-                            Hediff_Injury hediff_Injury = (Hediff_Injury)HediffMaker.MakeHediff(hediffDefFromDamage, pawn);
-                            hediff_Injury.Severity = (float)num2;
-                            hediff_Injury.TryGetComp<HediffComp_GetsOld>().isOld = true;
-                            pawn.health.AddHediff(hediff_Injury, bodyPartRecord, null);
-                        }
-                    }
-                }
-                for (int k = 1; k < pawn.ageTracker.AgeBiologicalYears; k++)
-                {
-                    HediffGiver_Birthday Gv = new HediffGiver_Birthday();
-                    Gv.TryApply(pawn);                    
-                }
-            }
+        //internal static class AgeInjuryUtility
+        //{
+        //    public static void GenerateRandomOldAgeInjuries(Pawn pawn)
+        //    {
+        //        int num = 0;
+        //        for (int i = 10; i < pawn.ageTracker.AgeBiologicalYears; i += 10)
+        //        {
+        //            if (Rand.Value < 0.15f)
+        //            {
+        //                num++;
+        //            }
+        //        }
+        //        for (int j = 0; j < num; j++)
+        //        {
+        //            DamageDef dam = AgeInjuryUtility.RandomOldInjuryDamageType();
+        //            int num2 = Rand.RangeInclusive(2, 6);
+        //            IEnumerable<BodyPartRecord> source =
+        //                from x in pawn.health.hediffSet.GetNotMissingParts(null, null)
+        //                where x.depth == BodyPartDepth.Outside && !Mathf.Approximately(x.def.oldInjuryBaseChance, 0f) && !pawn.health.hediffSet.PartOrAnyAncestorHasDirectlyAddedParts(x)
+        //                select x;
+        //            if (source.Any<BodyPartRecord>())
+        //            {
+        //                BodyPartRecord bodyPartRecord = source.RandomElementByWeight((BodyPartRecord x) => x.absoluteFleshCoverage);
+        //                HediffDef hediffDefFromDamage = HealthUtility.GetHediffDefFromDamage(dam, pawn, bodyPartRecord);
+        //                if (bodyPartRecord.def.oldInjuryBaseChance > 0f && hediffDefFromDamage.CompPropsFor(typeof(HediffComp_GetsOld)) != null)
+        //                {
+        //                    Hediff_Injury hediff_Injury = (Hediff_Injury)HediffMaker.MakeHediff(hediffDefFromDamage, pawn);
+        //                    hediff_Injury.Severity = (float)num2;
+        //                    hediff_Injury.TryGetComp<HediffComp_GetsOld>().isOld = true;
+        //                    pawn.health.AddHediff(hediff_Injury, bodyPartRecord, null);
+        //                }
+        //            }
+        //        }
+        //        for (int k = 1; k < pawn.ageTracker.AgeBiologicalYears; k++)
+        //        {
+        //            HediffGiver_Birthday Gv = new HediffGiver_Birthday();
+        //            Gv.TryApply(pawn);                    
+        //        }
+        //    }
 
-            private static DamageDef RandomOldInjuryDamageType()
-            {
-                switch (Rand.RangeInclusive(0, 3))
-                {
-                    case 0:
-                        return DamageDefOf.Bullet;
-                    case 1:
-                        return DamageDefOf.Scratch;
-                    case 2:
-                        return DamageDefOf.Bite;
-                    case 3:
-                        return DamageDefOf.Stab;
-                    default:
-                        throw new Exception();
-                }
-            }
+        //    private static DamageDef RandomOldInjuryDamageType()
+        //    {
+        //        switch (Rand.RangeInclusive(0, 3))
+        //        {
+        //            case 0:
+        //                return DamageDefOf.Bullet;
+        //            case 1:
+        //                return DamageDefOf.Scratch;
+        //            case 2:
+        //                return DamageDefOf.Bite;
+        //            case 3:
+        //                return DamageDefOf.Stab;
+        //            default:
+        //                throw new Exception();
+        //        }
+        //    }
 
-            public static IEnumerable<HediffDef> HediffsToGainOnBirthday(Pawn pawn, int age)
-            {
-                return AgeInjuryUtility.HediffsToGainOnBirthday(pawn.thingIDNumber, pawn.ageTracker.AgeBiologicalYears);
-            }
+        //    //public static IEnumerable<HediffGiver_Birthday> HediffsToGainOnBirthday(Pawn pawn, int age)
+        //    //{
+        //    //    return AgeInjuryUtility.HediffsToGainOnBirthday(pawn.def, pawn.thingIDNumber, pawn.ageTracker.AgeBiologicalYears);
+        //    //}
 
-            private static IEnumerable<HediffDef> HediffsToGainOnBirthday(int seed, int age)
-            {
-                Log.Warning("HediffsToGainOnBirthday");
-                yield break;
-                //foreach (HediffDef itm in DefDatabase<HediffDef>.AllDefsListForReading)
-                //{
-                //    if (itm.ageGainCurve != null && Rand.Value < itm.ageGainCurve.PeriodProbabilityFromCumulative((float)age, 1f))
-                //        yield return itm;
-                //}
-            }
-        }
+        //    //private static IEnumerable<HediffGiver_Birthday> HediffsToGainOnBirthday(ThingDef raceDef, int seed, int age)
+        //    //{
+        //    //    AgeInjuryUtility.c__Iterator7F c__Iterator7F = new AgeInjuryUtility.c__Iterator7F();
+        //    //    c__Iterator7F.raceDef = raceDef;
+        //    //    c__Iterator7F.age = age;
+        //    //    c__Iterator7F.___raceDef = raceDef;
+        //    //    c__Iterator7F.___age = age;
+        //    //    AgeInjuryUtility.c__Iterator7F expr_23 = c__Iterator7F;
+        //    //    expr_23._PC = -2;
+        //    //    return expr_23;
+        //    //}
+
+        //    //private sealed class c__Iterator7F : IEnumerator, IDisposable, IEnumerable, IEnumerable<HediffGiver_Birthday>, IEnumerator<HediffGiver_Birthday>
+        //    //{
+        //    //    internal ThingDef raceDef;
+
+        //    //    internal List<HediffGiverSetDef> _sets___0;
+
+        //    //    internal int _____1;
+
+        //    //    internal List<HediffGiver> _givers___2;
+
+        //    //    internal int _j___3;
+
+        //    //    internal HediffGiver_Birthday _agb___4;
+
+        //    //    internal float _oneYearFractionOfLifeExpectancy___5;
+
+        //    //    internal int age;
+
+        //    //    internal float _ageFractionOfLifeExpectancy___6;
+
+        //    //    internal int _PC;
+
+        //    //    internal HediffGiver_Birthday _current;
+
+        //    //    internal ThingDef ___raceDef;
+
+        //    //    internal int ___age;
+
+        //    //    HediffGiver_Birthday IEnumerator<HediffGiver_Birthday>.Current
+        //    //    {
+        //    //        get
+        //    //        {
+        //    //            return this._current;
+        //    //        }
+        //    //    }
+
+        //    //    object IEnumerator.Current
+        //    //    {
+        //    //        get
+        //    //        {
+        //    //            return this._current;
+        //    //        }
+        //    //    }
+
+        //    //    IEnumerator IEnumerable.GetEnumerator()
+        //    //    {
+        //    //        return ((System.Collections.Generic.IEnumerable<Verse.HediffGiver_Birthday>)this).GetEnumerator();
+        //    //    }
+
+        //    //    IEnumerator<HediffGiver_Birthday> IEnumerable<HediffGiver_Birthday>.GetEnumerator()
+        //    //    {
+        //    //        if (Interlocked.CompareExchange(ref this._PC, 0, -2) == -2)
+        //    //        {
+        //    //            return this;
+        //    //        }
+        //    //        AgeInjuryUtility.c__Iterator7F c__Iterator7F = new AgeInjuryUtility.c__Iterator7F();
+        //    //        c__Iterator7F.raceDef = this.___raceDef;
+        //    //        c__Iterator7F.age = this.___age;
+        //    //        return c__Iterator7F;
+        //    //    }
+
+        //    //    public bool MoveNext()
+        //    //    {
+        //    //        uint num = (uint)this._PC;
+        //    //        this._PC = -1;
+        //    //        switch (num)
+        //    //        {
+        //    //            case 0u:
+        //    //                this._sets___0 = this.raceDef.race.hediffGiverSets;
+        //    //                if (this._sets___0 != null)
+        //    //                {
+        //    //                    this._____1 = 0;
+        //    //                    goto IL_147;
+        //    //                }
+        //    //                goto IL_15D;
+        //    //            case 1u:
+        //    //                {
+        //    //                    IL_115:
+        //    //                    this._j___3++;
+        //    //                    break;
+        //    //                }
+        //    //            default:
+        //    //            return false;
+        //    //        }
+        //    //        IL_123:
+        //    //        if (this._j___3 >= this._givers___2.Count)
+        //    //        {
+        //    //            this._____1++;
+        //    //        }
+        //    //        else
+        //    //        {
+        //    //            this._agb___4 = (this._givers___2[this._j___3] as HediffGiver_Birthday);
+        //    //            if (this._agb___4 == null)
+        //    //            {
+        //    //                goto IL_115;
+        //    //            }
+        //    //            this._oneYearFractionOfLifeExpectancy___5 = 1f / this.raceDef.race.lifeExpectancy;
+        //    //            this._ageFractionOfLifeExpectancy___6 = (float)this.age / this.raceDef.race.lifeExpectancy;
+        //    //            if (Rand.Value < this._agb___4.ageFractionChanceCurve.PeriodProbabilityFromCumulative(this._ageFractionOfLifeExpectancy___6, this._oneYearFractionOfLifeExpectancy___5))
+        //    //            {
+        //    //                this._current = this._agb___4;
+        //    //                this._PC = 1;
+        //    //                return true;
+        //    //            }
+        //    //            goto IL_115;
+        //    //        }
+        //    //        IL_147:
+        //    //        if (this._____1 < this._sets___0.Count)
+        //    //        {
+        //    //            this._givers___2 = this._sets___0[this._____1].hediffGivers;
+        //    //            this._j___3 = 0;
+        //    //            goto IL_123;
+        //    //        }
+        //    //        IL_15D:
+        //    //        this._PC = -1;
+        //    //        return false;
+        //    //    }
+
+        //    //    public void Dispose()
+        //    //    {
+        //    //        this._PC = -1;
+        //    //    }
+
+        //    //    public void Reset()
+        //    //    {
+        //    //        throw new NotSupportedException();
+        //    //    }
+        //    //}
+        //}
     }
 }

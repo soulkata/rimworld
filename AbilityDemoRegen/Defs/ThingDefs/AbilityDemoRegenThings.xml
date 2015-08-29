@@ -3,9 +3,9 @@
 
   <ThingDef>
     <defName>Demo_Regen_Muffalo</defName>
+    <thingClass>Pawn</thingClass>
     <label>regenerationg muffalo</label>
     <description>A sample muffalo unit wich regeneration.</description>
-    <thingClass>Pawn</thingClass>
     <category>Pawn</category>
     <selectable>true</selectable>
     <tickerType>Normal</tickerType>
