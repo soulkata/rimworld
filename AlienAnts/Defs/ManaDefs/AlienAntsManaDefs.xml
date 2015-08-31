@@ -5,7 +5,6 @@
     <label>Alien Ant Queen mana replenish</label>
     <races>
       <li>Ant_Nurse</li>
-      <li>Ant_Princess</li>
     </races>
     <initial>80</initial>
     <replenish Class="AbilityPack.ManaReplenish_Regenerate">

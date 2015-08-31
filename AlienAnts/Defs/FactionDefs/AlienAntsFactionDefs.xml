@@ -6,9 +6,8 @@
     <description>This is an alien ants enemy faction.</description>
     <pawnsPlural>alien ants</pawnsPlural>
     <requiredCountAtGameStart>1</requiredCountAtGameStart>
-    <canMakeRandomly>true</canMakeRandomly>
     <fixedName>the alien ants</fixedName>
-    <raidCommonality>50</raidCommonality>
+    <raidCommonality>45</raidCommonality>
     <humanlikeFaction>false</humanlikeFaction>
     <hidden>true</hidden>
     <canSiege>false</canSiege>
@@ -28,20 +27,24 @@
       <li>
         <options>
           <li>
-            <selectionWeight>10</selectionWeight>
+            <selectionWeight>50</selectionWeight>
             <kind>AntWorker</kind>
           </li>
           <li>
-            <selectionWeight>20</selectionWeight>
+            <selectionWeight>10</selectionWeight>
             <kind>AntWarrior</kind>
           </li>
           <li>
-            <selectionWeight>20</selectionWeight>
+            <selectionWeight>10</selectionWeight>
             <kind>AntStinger</kind>
           </li>
           <li>
             <selectionWeight>10</selectionWeight>
             <kind>AntNurse</kind>
+          </li>
+          <li>
+            <selectionWeight>3</selectionWeight>
+            <kind>AntQueen</kind>
           </li>
         </options>
       </li>

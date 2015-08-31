@@ -58,6 +58,37 @@
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\Defs\AbilityDefs\AlienAntsAbilityDefs.xml">
+      <Link>AlienAntsAbilityDefs.xml</Link>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="..\Defs\BodyDefs\AlienAntsBodies.xml">
+      <Link>AlienAntsBodies.xml</Link>
+    </Content>
+    <Content Include="..\Defs\FactionDefs\AlienAntsFactionDefs.xml">
+      <Link>AlienAntsFactionDefs.xml</Link>
+    </Content>
+    <Content Include="..\Defs\JobDefs\AlienAntsJobDefs.xml">
+      <Link>AlienAntsJobDefs.xml</Link>
+    </Content>
+    <Content Include="..\Defs\ManaDefs\AlienAntsManaDefs.xml">
+      <Link>AlienAntsManaDefs.xml</Link>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="..\Defs\PawnKindDefs\AlienAntsPawnKinds.xml">
+      <Link>AlienAntsPawnKinds.xml</Link>
+    </Content>
+    <Content Include="..\Defs\ThingDefs\AlienAntsThingDefsGuns.xml">
+      <Link>AlienAntsThingDefsGuns.xml</Link>
+    </Content>
+    <Content Include="..\Defs\ThingDefs\AlienAntsThingDefsPawns.xml">
+      <Link>AlienAntsThingDefsPawns.xml</Link>
+    </Content>
+    <Content Include="..\Defs\ThinkTreeDefs\AlienAntsThinkTree.xml">
+      <Link>AlienAntsThinkTree.xml</Link>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

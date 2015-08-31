@@ -18,8 +18,7 @@ namespace AlienAnts
 
             foreach (Pawn p in brain.ownedPawns)
             {
-                if ((p.def.defName == "Ant_Princess") ||
-                    (p.def.defName == "Ant_Queen"))
+                if (p.def.defName == "Ant_Queen")
                     return false;
 
                 Saveable_Caster save;
