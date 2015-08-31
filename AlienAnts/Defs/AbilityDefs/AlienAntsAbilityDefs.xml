@@ -23,7 +23,7 @@
     </priority>
     <target Class="AbilityPack.AbilityTarget_Self" />
     <effect Class="AbilityPack.AbilityEffect_Evolve">
-      <canBeInterrupted>true</canBeInterrupted>
+      <canBeInterrupted>false</canBeInterrupted>
       <castTime>400</castTime>
       <items>
         <li>

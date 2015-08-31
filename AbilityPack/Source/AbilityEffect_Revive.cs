@@ -154,6 +154,7 @@ namespace AbilityPack
             pawn.filth = new Pawn_FilthTracker(pawn);
             pawn.needs = new Pawn_NeedsTracker(pawn);
             pawn.stances = new Pawn_StanceTracker(pawn);
+            pawn.InitUnsavedUniversalComponents();
 
             if (pawn.RaceProps.ToolUser)
             {
