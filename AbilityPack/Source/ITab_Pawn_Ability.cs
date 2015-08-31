@@ -85,6 +85,8 @@ namespace AbilityPack
 
                 foreach (Saveable_ExecutionLog log in pawn.executionLogs.Where(i => i.isValid && i.ability.visible))
                     this.WriteLine(ref num, log.numberOfExecution.ToString(), log.ticksSinceExecution.ToString(), log.ability.label);
+
+                Text.Anchor = TextAnchor.UpperLeft;
             }
         }
 
