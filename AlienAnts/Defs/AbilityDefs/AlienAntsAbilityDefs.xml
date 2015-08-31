@@ -37,87 +37,7 @@
       </items>
       <casterMote Class="AbilityPack.AbilityMote_Default" />
     </effect>
-  </AbilityDef>
-
-  <AbilityDef>
-    <defName>AlienWorkerEvolveAbility</defName>
-    <label>Maturing</label>
-    <races>
-      <li>Ant_Worker</li>
-    </races>
-    <validity Class="AbilityPack.AbilityRequeriment_All">
-      <items>
-          <li Class="AbilityPack.AbilityRequeriment_CasterConscious" />
-          <li Class="AbilityPack.AbilityRequeriment_ColonyBiggerThan">
-            <value>100</value>
-          </li>
-      </items>
-    </validity>
-    <requeriment Class="AbilityPack.AbilityRequeriment_All">
-      <items>
-        <li Class="AbilityPack.AbilityRequeriment_TimeFixed">
-          <value>1000</value>
-        </li>
-        <li Class="AbilityPack.AbilityRequeriment_RandomChance">
-          <accepts>1</accepts>
-          <total>2000</total>
-        </li>
-      </items>
-    </requeriment>
-    <priority Class="AbilityPack.AbilityPriority_Fixed">
-      <value>10</value>
-    </priority>
-    <target Class="AbilityPack.AbilityTarget_Self" />
-    <effect Class="AbilityPack.AbilityEffect_Random">            
-      <items>
-        <li Class="AbilityPack.AbilityEffect_Evolve">
-          <canBeInterrupted>true</canBeInterrupted>
-          <castTime>100</castTime>
-          <items>
-            <li>              
-              <from>
-                <li>Ant_Worker</li>
-              </from>
-              <to>
-                <li>AntWarrior</li>
-              </to>
-            </li>
-          </items>
-          <casterMote Class="AbilityPack.AbilityMote_Default" />
-        </li>
-        <li Class="AbilityPack.AbilityEffect_Evolve">
-          <canBeInterrupted>true</canBeInterrupted>
-          <castTime>100</castTime>
-          <items>
-            <li>
-              <from>
-                <li>Ant_Worker</li>
-              </from>
-              <to>
-                <li>AntStinger</li>
-              </to>
-          </li>
-          </items>
-          <casterMote Class="AbilityPack.AbilityMote_Default" />
-        </li>
-        <li Class="AbilityPack.AbilityEffect_Evolve">
-          <canBeInterrupted>true</canBeInterrupted>
-          <castTime>100</castTime>
-          <items>
-            <li>
-              <from>
-                <li>Ant_Worker</li>
-              </from>
-              <to>
-                <li>AntNurse</li>
-              </to>
-            </li>
-          </items>
-          <casterMote Class="AbilityPack.AbilityMote_Default" />
-        </li>
-      </items>
-    </effect>
-  </AbilityDef>
+  </AbilityDef>  
 
   <AbilityDef>
     <defName>AlienQueenSpawnAbility</defName>
@@ -127,79 +47,14 @@
     </races>
     <validity Class="AbilityPack.AbilityRequeriment_CasterConscious" />
     <!-- One of this conditions must be true to execute -->
-    <requeriment Class="AbilityPack.AbilityRequeriment_Any">
+    <requeriment Class="AbilityPack.AbilityRequeriment_All">
       <items>
-        <!-- This contitions makes the spawn goes fastest, only if the Brain allready loses 50% its power -->
-        <li Class="AbilityPack.AbilityRequeriment_All">
-          <items>
-            <li Class="AbilityPack.AbilityRequeriment_SquadSmallerThanColony">
-              <squadPowerMultiplier>2.0</squadPowerMultiplier>
-            </li>
-            <li Class="AbilityPack.AbilityRequeriment_RandomChance">
-              <accepts>1</accepts>
-              <total>200</total>
-            </li>
-          </items>
+        <li Class="AbilityPack.AbilityRequeriment_TimeFixed">
+          <value>300</value>
         </li>
-        <!-- This contitions makes the spawn goes faster, if the Brain allready loses 10% its power -->
-        <li Class="AbilityPack.AbilityRequeriment_All">
-          <items>
-            <li Class="AbilityPack.AbilityRequeriment_SquadSmallerThanColony">
-              <squadPowerMultiplier>1.2</squadPowerMultiplier>
-            </li>
-            <li Class="AbilityPack.AbilityRequeriment_TimeFixed">
-              <value>300</value>
-            </li>
-            <li Class="AbilityPack.AbilityRequeriment_RandomChance">
-              <accepts>1</accepts>
-              <total>200</total>
-            </li>
-          </items>
-        </li>
-        <!-- This contitions makes the spawn goes at normal rates, when the Brain is at normal size -->
-        <li Class="AbilityPack.AbilityRequeriment_All">
-          <items>
-            <li Class="AbilityPack.AbilityRequeriment_SquadSmallerThanColony">
-              <squadPowerMultiplier>1.0</squadPowerMultiplier>
-            </li>
-            <li Class="AbilityPack.AbilityRequeriment_TimeFixed">
-              <value>600</value>
-            </li>
-            <li Class="AbilityPack.AbilityRequeriment_RandomChance">
-              <accepts>1</accepts>
-              <total>200</total>
-            </li>
-          </items>
-        </li>
-        <!-- This contitions makes the spawn goes at lower rates, when the Brain is greater than the normal rates -->
-        <li Class="AbilityPack.AbilityRequeriment_All">
-          <items>
-            <li Class="AbilityPack.AbilityRequeriment_SquadSmallerThanColony">
-              <squadPowerMultiplier>0.8</squadPowerMultiplier>
-            </li>
-            <li Class="AbilityPack.AbilityRequeriment_TimeFixed">
-              <value>1000</value>
-            </li>
-            <li Class="AbilityPack.AbilityRequeriment_RandomChance">
-              <accepts>1</accepts>
-              <total>200</total>
-            </li>
-          </items>
-        </li>
-        <!-- This contitions makes the spawn goes at lowest, when the Brain allready too big -->
-        <li Class="AbilityPack.AbilityRequeriment_All">
-          <items>
-            <li Class="AbilityPack.AbilityRequeriment_SquadSmallerThanColony">
-              <squadPowerMultiplier>0.6</squadPowerMultiplier>
-            </li>
-            <li Class="AbilityPack.AbilityRequeriment_TimeFixed">
-              <value>3000</value>
-            </li>
-            <li Class="AbilityPack.AbilityRequeriment_RandomChance">
-              <accepts>1</accepts>
-              <total>200</total>
-            </li>
-          </items>
+        <li Class="AbilityPack.AbilityRequeriment_RandomChance">
+          <accepts>1</accepts>
+          <total>200</total>
         </li>
       </items>
     </requeriment>

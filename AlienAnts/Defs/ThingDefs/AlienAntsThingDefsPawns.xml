@@ -100,7 +100,7 @@
     <label>ant worker</label>
     <description>This is a worker ant, which performs the colony labor work.</description>
     <statBases>
-      <MoveSpeed>3.0</MoveSpeed>
+      <MoveSpeed>3.5</MoveSpeed>
       <ArmorRating_Sharp>0.2</ArmorRating_Sharp>
       <MarketValue>10</MarketValue>
     </statBases>
@@ -205,7 +205,7 @@
     <label>ant stinger</label>
     <description>This is a ranged fighter ant, responsible for defending the colony.</description>
     <statBases>
-      <MoveSpeed>3.0</MoveSpeed>
+      <MoveSpeed>2.95</MoveSpeed>
       <ArmorRating_Sharp>0.4</ArmorRating_Sharp>
       <MarketValue>50</MarketValue>
     </statBases>
@@ -251,7 +251,7 @@
     <label>ant nurse</label>
     <description>This is a healer ant, responsible for healing other injured ants.</description>
     <statBases>
-      <MoveSpeed>6.0</MoveSpeed>
+      <MoveSpeed>2.95</MoveSpeed>
       <ArmorRating_Sharp>0.2</ArmorRating_Sharp>
       <MarketValue>50</MarketValue>
     </statBases>
@@ -297,7 +297,7 @@
     <label>ant queen</label>
     <description>This is a queen ant, responsible for giving birth to new ants.</description>
     <statBases>
-      <MoveSpeed>1.0</MoveSpeed>
+      <MoveSpeed>2.7</MoveSpeed>
       <ArmorRating_Blunt>0.3</ArmorRating_Blunt>
       <ArmorRating_Sharp>0.9</ArmorRating_Sharp>
       <MarketValue>1000</MarketValue>

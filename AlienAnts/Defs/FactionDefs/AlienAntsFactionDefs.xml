@@ -27,7 +27,7 @@
       <li>
         <options>
           <li>
-            <selectionWeight>50</selectionWeight>
+            <selectionWeight>60</selectionWeight>
             <kind>AntWorker</kind>
           </li>
           <li>
