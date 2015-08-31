@@ -75,7 +75,7 @@
     <defName>AntWarrior</defName>
     <label>ant warrior</label>
     <race>Ant_Warrior</race>
-    <combatPower>90</combatPower>
+    <combatPower>140</combatPower>
     <defaultFactionType>AlienAnts</defaultFactionType>
     <aiAvoidCover>true</aiAvoidCover>
     <isFighter>true</isFighter>
