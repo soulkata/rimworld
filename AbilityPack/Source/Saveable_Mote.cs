@@ -18,6 +18,6 @@ namespace AbilityPack
 
         public abstract void InitializeMote(ref Thing mote);
         public abstract bool Tick();
-        public abstract void Completed(Saveable_Caster caster, bool sucess);
+        public abstract void Completed(Saveable_Caster caster, bool sucess, Action<Saveable_Mote> terminated);
     }
 }

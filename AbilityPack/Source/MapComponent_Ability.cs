@@ -9,7 +9,6 @@ namespace AbilityPack
 {
     public class MapComponent_Ability : MapComponent
     {
-        public const string JobDefName = "AbilityEffect_JobDef";
         public const int longTickOffet = 64;
 
         private AbilityDef[] emptyAbilities = new AbilityDef[0];
@@ -178,7 +177,8 @@ namespace AbilityPack
                         }
                         else
                             if ((pawn.CurJob == null) ||
-                                (pawn.CurJob.def.defName != MapComponent_Ability.JobDefName))
+                                ((pawn.CurJob.def.defName != "AbilityEffect_JobDef") &&
+                                 (pawn.CurJob.def.defName != "AbilityEffect_JobDef_Interruptable")))
                             {
                                 AbilityDef toStartAbility;
                                 List<Thing> targets;
@@ -251,7 +251,8 @@ namespace AbilityPack
 
             AbilityDef executingAbility;
             if ((pawn.CurJob != null) &&
-                (pawn.CurJob.def.defName == MapComponent_Ability.JobDefName))
+                ((pawn.CurJob.def.defName == "AbilityEffect_JobDef") ||
+                 (pawn.CurJob.def.defName == "AbilityEffect_JobDef_Interruptable")))
                 executingAbility = value.currentAbility;
             else
                 executingAbility = null;

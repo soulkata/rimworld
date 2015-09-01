@@ -17,6 +17,12 @@ namespace AbilityPack
             return this.items[state.item].TryStart(ability, caster, ref targets, ref state.effectState);
         }
 
+        public override JobDef StartJob(IExposable effectState)
+        {
+            AbilityEffect_RandomState typedState = (AbilityEffect_RandomState)effectState;
+            return this.items[typedState.item].StartJob(typedState.effectState);
+        }
+
         public override IEnumerable<Toil> MakeNewToils(JobDriver_AbilityEffect jobDriver, Saveable_Caster caster, IEnumerable<Thing> targets, IExposable effectState)
         {
             AbilityEffect_RandomState typedState = (AbilityEffect_RandomState)effectState;

@@ -14,6 +14,14 @@ namespace AbilityPack
 
         public override bool TryStart(AbilityDef ability, Saveable_Caster caster, ref List<Thing> target, ref IExposable effectState) { return caster.manaValue >= this.manaCost; }
 
+        public override JobDef StartJob(IExposable effectState)
+        {
+            if (this.canBeInterrupted)
+                return DefDatabase<JobDef>.GetNamed("AbilityEffect_JobDef_Interruptable");
+            else
+                return DefDatabase<JobDef>.GetNamed("AbilityEffect_JobDef");
+        }
+
         public override IEnumerable<Toil> MakeNewToils(JobDriver_AbilityEffect jobDriver, Saveable_Caster caster, IEnumerable<Thing> targets, IExposable effectState)
         {
             JobDriverHolder holder = new JobDriverHolder(this, jobDriver, caster, targets, effectState);
@@ -27,6 +35,7 @@ namespace AbilityPack
 			toil.initAction = holder.OnStartCast;
 			toil.defaultCompleteMode = ToilCompleteMode.Delay;
 			toil.defaultDuration = this.castTime;
+            toil.AddFinishAction(holder.OnInterruptDamageTaken);
 			yield return toil;
 
             toil = new Toil();
@@ -80,13 +89,9 @@ namespace AbilityPack
                 this.owner.StartCast(this.caster, this.targets);
             }
 
-            public void OnDamageTaken(DamageInfo damage)
+            public void OnInterruptDamageTaken()
             {
-                if (damage.Def.canInterruptJobs)
-                {
-                    this.jobDriver.EndJobWith(JobCondition.InterruptOptional);
-                    this.caster.NotifyCompleted(false);
-                }
+                this.caster.NotifyCompleted(false);
             }
 
             public void OnFinishCast() 

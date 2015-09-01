@@ -14,7 +14,7 @@ namespace AbilityPack
                 Saveable_ExecutionLog log = cachePawn.GetLog(cachePawn.currentAbility);
                 log.numberOfExecution++;
                 log.ticksSinceExecution = 0;
-                return new ThinkResult(new Job(DefDatabase<JobDef>.GetNamed(MapComponent_Ability.JobDefName)), this);
+                return new ThinkResult(new Job(cachePawn.currentAbility.effect.StartJob(cachePawn.effectState)), this);
             }
             return ThinkResult.NoJob;
         }

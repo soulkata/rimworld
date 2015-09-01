@@ -32,7 +32,7 @@ namespace AbilityPack
         public float exactAlpha;
         public float exactRotation;
         public Vector3 exactScale;
-        public Color currentColor;
+        public Color currentColor;        
 
         public override void InitializeMote(ref Thing mote)
         {
@@ -63,8 +63,13 @@ namespace AbilityPack
             this.exactAlpha = Mathf.Clamp(this.exactAlpha + this.alphaChange, 0.0f, 1.0f);
             if (this.exactAlpha == 0)
             {
-                if (this.mote != null)
+                if (this.terminated != null)
                 {
+                    this.terminated(this);
+                    this.terminated = null;                        
+                }
+                if (this.mote != null)
+                {                    
                     if (!this.mote.Destroyed)
                         this.mote.Destroy();
                     this.mote = null;
@@ -83,8 +88,11 @@ namespace AbilityPack
             }
         }
 
-        public override void Completed(Saveable_Caster caster, bool sucess)
+        private Action<Saveable_Mote> terminated;
+
+        public override void Completed(Saveable_Caster caster, bool sucess, Action<Saveable_Mote> terminated)
         {
+            this.terminated = terminated;
             this.exactAlpha = 1.0f;
             this.alphaChange = -1.0f / 64.0f;
             if (sucess)

@@ -14,6 +14,7 @@ namespace AbilityPack
         public ManaDef manaDef;
         public float manaValue;
 
+        public bool sucess = true;
         public bool whaitingForThinkNode;
         public AbilityDef currentAbility;
         public IExposable effectState;
@@ -63,8 +64,7 @@ namespace AbilityPack
         public void NotifyCompleted(bool sucess)
         {
             foreach (Saveable_Mote mote in this.currentMotes)
-                mote.Completed(this, sucess);
-            this.currentMotes.Clear();
+                mote.Completed(this, sucess, i => this.currentMotes.Remove(i));            
             this.currentAbility = null;
             this.currentTargets = null;
             this.effectState = null;
