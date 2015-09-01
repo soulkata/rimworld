@@ -56,22 +56,22 @@ namespace FactionGauntlet
                 case ExecutingStage.PickingParameters:
                     if (!this.competitorTable.HasValue)
                     {
-                        if (!Find.LayerStack.HasLayerOfType(typeof(LayerChooserChallengeType)))
-                            Find.LayerStack.Add(new LayerChooserChallengeType());                    
+                        if (!Find.WindowStack.Windows.OfType<LayerChooserChallengeType>().Any())
+                            Find.WindowStack.Add(new LayerChooserChallengeType());
                         return;
                     }
 
                     if (!this.style.HasValue)
                     {
-                        if (!Find.LayerStack.HasLayerOfType(typeof(LayerChooserFightStyle)))
-                            Find.LayerStack.Add(new LayerChooserFightStyle());
+                        if (!Find.WindowStack.Windows.OfType<LayerChooserFightStyle>().Any())
+                            Find.WindowStack.Add(new LayerChooserFightStyle());
                         return;
                     }
 
                     if (!this.raidScales.Any())
                     {
-                        if (!Find.LayerStack.HasLayerOfType(typeof(LayerChooserRaidScale)))
-                            Find.LayerStack.Add(new LayerChooserRaidScale());
+                        if (!Find.WindowStack.Windows.OfType<LayerChooserRaidScale>().Any())
+                            Find.WindowStack.Add(new LayerChooserRaidScale());
                         return;
                     }
 
@@ -79,15 +79,15 @@ namespace FactionGauntlet
                         ((this.competitorTable.Value == ChallengeType.AnotherFaction) &&
                          (this.toRaid.Count == 1)))
                     {
-                        if (!Find.LayerStack.HasLayerOfType(typeof(LayerChooserFaction)))
-                            Find.LayerStack.Add(new LayerChooserFaction());
+                        if (!Find.WindowStack.Windows.OfType<LayerChooserFaction>().Any())
+                            Find.WindowStack.Add(new LayerChooserFaction());
                         return;
                     }
 
                     if (!this.sandBagChance.HasValue)
                     {
-                        if (!Find.LayerStack.HasLayerOfType(typeof(LayerChooserArenaGround)))
-                            Find.LayerStack.Add(new LayerChooserArenaGround());
+                        if (!Find.WindowStack.Windows.OfType<LayerChooserArenaGround>().Any())
+                            Find.WindowStack.Add(new LayerChooserArenaGround());
                         return;
                     }
 
@@ -212,25 +212,27 @@ namespace FactionGauntlet
                     this.currentFight.factionTwo.SetHostileTo(this.currentFight.factionOne, true);
                     this.currentFight.factionTwo.SetHostileTo(Faction.OfColony, true);
 
-                    List<Brain> oldBrains = new List<Brain>(Find.SquadBrianManager.allSquadBrains);
+                    List<Brain> oldBrains = new List<Brain>(Find.SquadBrainManager.allSquadBrains);
                 
                     IncidentDef incidentDef = IncidentDef.Named("RaidEnemy");
-                    IncidentParms incidentParms = Find.Storyteller.incidentMaker.ParmsNow(incidentDef.category);
+                    IncidentParms incidentParms = Find.Storyteller.def.IncidentMaker.ParmsNow(incidentDef.category);
                     incidentParms.faction = this.currentFight.factionOne;
                     incidentParms.spawnCenter = new IntVec3(30, 0, 35);
-                    incidentParms.raidStyle = RaidStyle.ImmediateAttack;
+                    incidentParms.raidStrategy = RaidStrategyDefOf.ImmediateAttack;
                     incidentParms.points = this.currentFight.points;
+                    incidentParms.raidArrivalMode = PawnsArriveMode.EdgeWalkIn;
                     incidentDef.Worker.TryExecute(incidentParms);
 
                     incidentDef = IncidentDef.Named("RaidEnemy");
-                    incidentParms = Find.Storyteller.incidentMaker.ParmsNow(incidentDef.category);
+                    incidentParms = Find.Storyteller.def.IncidentMaker.ParmsNow(incidentDef.category);
                     incidentParms.faction = this.currentFight.factionTwo;
                     incidentParms.spawnCenter = new IntVec3(80, 0, 35);
-                    incidentParms.raidStyle = RaidStyle.ImmediateAttack;
+                    incidentParms.raidStrategy = RaidStrategyDefOf.ImmediateAttack;
                     incidentParms.points = this.currentFight.points;
+                    incidentParms.raidArrivalMode = PawnsArriveMode.EdgeWalkIn;
                     incidentDef.Worker.TryExecute(incidentParms);
 
-                    List<Brain> newBrains = new List<Brain>(Find.SquadBrianManager.allSquadBrains);
+                    List<Brain> newBrains = new List<Brain>(Find.SquadBrainManager.allSquadBrains);
                     foreach (Brain b in oldBrains)
                         newBrains.Remove(b);
 
@@ -288,7 +290,7 @@ namespace FactionGauntlet
         }
 
         public IEnumerable<Pawn> BrainUnits(Brain brain) { return brain.ownedPawns.Where(i => (!i.Downed) && (!i.Dead)); }
-        public float BrainPoints(Brain brain) { return this.BrainUnits(brain).Sum(i => i.kindDef.pointsCost); }
+        public float BrainPoints(Brain brain) { return this.BrainUnits(brain).Sum(i => i.kindDef.combatPower); }
 
         private void CalculateFights(Faction factionOne, Faction factionTwo)
         {

@@ -4,7 +4,7 @@ using Verse;
 
 namespace FactionGauntlet
 {
-    public class SaveableFight : Saveable
+    public class SaveableFight : IExposable
     {
         public float points;
         public Faction factionTwo;
