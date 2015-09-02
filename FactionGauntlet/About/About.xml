@@ -2,7 +2,7 @@
 <ModMetaData>
   <name>Raid Contront</name>
   <author>Soulkata</author>
-  <targetVersion>Alpha 10</targetVersion>
+  <targetVersion>Alpha 12</targetVersion>
   <description>
     This mod adds an option to test the strength of a faction. It does this basically putting two raids near and making the first attack the second. This is useful to measure the balance of changes in other mods.
   </description>
