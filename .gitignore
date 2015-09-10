@@ -211,3 +211,4 @@ AbilityPack/Assemblies/Assembly-UnityScript-firstpass.dll
 AbilityPack/Assemblies/Boo.Lang.dll
 AbilityPack/Assemblies/UnityEngine.dll
 AbilityPack/Assemblies/UnityScript.Lang.dll
+*.dll
