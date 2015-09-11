@@ -31,7 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\..\RimWorld\RimWorld911Win_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\..\..\RimWorld\RimWorld914Win_Data\Managed\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -41,7 +41,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="UnityEngine">
-      <HintPath>..\..\..\RimWorld\RimWorld911Win_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>..\..\..\RimWorld\RimWorld914Win_Data\Managed\UnityEngine.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
@@ -50,13 +50,6 @@
     <Compile Include="JobDriver_DoNothing.cs" />
     <Compile Include="JobGiver_DoNothing.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\AbilityPack\Source\AbilityPack.csproj">
-      <Project>{80f23b43-0ed9-4bb7-98d0-b0ea9dcc38d0}</Project>
-      <Name>AbilityPack</Name>
-      <Private>False</Private>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\Defs\AbilityDefs\AlienAntsAbilityDefs.xml">
@@ -88,6 +81,13 @@
     <Content Include="..\Defs\ThinkTreeDefs\AlienAntsThinkTree.xml">
       <Link>AlienAntsThinkTree.xml</Link>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\AbilityPack\Source\AbilityPack.csproj">
+      <Project>{80f23b43-0ed9-4bb7-98d0-b0ea9dcc38d0}</Project>
+      <Name>AbilityPack</Name>
+      <Private>False</Private>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
