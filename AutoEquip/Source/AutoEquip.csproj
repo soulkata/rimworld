@@ -54,6 +54,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Saveable_Outfit.cs" />
     <Compile Include="Saveable_Outfit_StatDef.cs" />
+    <Compile Include="Saveable_PawnNextApparelConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\Defs\MainTabDefs\MainTabs.xml">

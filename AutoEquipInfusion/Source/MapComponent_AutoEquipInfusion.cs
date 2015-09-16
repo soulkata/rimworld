@@ -10,7 +10,7 @@ namespace AutoEquipInfusion
         static MapComponent_AutoEquipInfusion()
         {
             Log.Message("AutoEquip with Infusion Initialized");
-            JobGiver_OptimizeApparelAutoEquip.ApparelScoreRawStatsHandlers += JobGiver_OptimizeApparelAutoEquip_ApparelScoreRawStatsHandlers;
+            Saveable_PawnNextApparelConfiguration.ApparelScoreRawStatsHandlers += JobGiver_OptimizeApparelAutoEquip_ApparelScoreRawStatsHandlers;
         }
 
         static void JobGiver_OptimizeApparelAutoEquip_ApparelScoreRawStatsHandlers(Pawn pawn, Apparel apparel, StatDef stat, ref float val)
