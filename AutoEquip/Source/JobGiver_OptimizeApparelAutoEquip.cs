@@ -42,6 +42,10 @@ namespace AutoEquip
                 Apparel a = configurarion.toDropApparel[i];
                 configurarion.toDropApparel.Remove(a);
 
+#if LOG && JOBS
+                Log.Message("Pawn " + pawn + " drop apparel: " + a);
+#endif
+
                 if (pawn.apparel.WornApparel.Contains(a))
                 {
                     Apparel t;
@@ -73,7 +77,13 @@ namespace AutoEquip
                             if (configurarion.toWearApparel.Contains(ap))
                             {
                                 if (pawn.CanReserveAndReach(ap, PathEndMode.OnCell, pawn.NormalMaxDanger(), 1))
+                                {
+#if LOG && JOBS
+                Log.Message("Pawn " + pawn + " wear apparel: " + ap);
+#endif
+
                                     return new Job(JobDefOf.Wear, ap);
+                                }
                             }
                         }
                     }

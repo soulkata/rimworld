@@ -6,18 +6,18 @@ using Verse;
 
 namespace AutoEquip
 {
-    public class Saveable_PawnNextApparelConfiguration : IExposable
+    public class Saveable_PawnNextApparelConfiguration //: IExposable
     {
         public Pawn pawn;
         public List<Apparel> toWearApparel = new List<Apparel>();
         public List<Apparel> toDropApparel = new List<Apparel>();
 
-        public void ExposeData()
-        {
-            Scribe_References.LookReference(ref this.pawn, "pawn");
-            Scribe_Collections.LookList(ref this.toWearApparel, "toWearApparel", LookMode.Deep);
-            Scribe_Collections.LookList(ref this.toDropApparel, "toDropApparel", LookMode.Deep);
-        }
+        //public void ExposeData()
+        //{
+        //    Scribe_References.LookReference(ref this.pawn, "pawn");
+        //    Scribe_Collections.LookList(ref this.toWearApparel, "toWearApparel", LookMode.MapReference);
+        //    Scribe_Collections.LookList(ref this.toDropApparel, "toDropApparel", LookMode.MapReference);
+        //}
 
         public bool optimized;
         public List<Apparel> calculedApparel;
@@ -109,6 +109,7 @@ namespace AutoEquip
             }
 
             gain = this.ApparelScoreRaw(ap);
+            bool dropAny = false;
             foreach (Apparel wornApparel in this.calculedApparel)
             {
                 if (!ApparelUtility.CanWearTogether(wornApparel.def, ap.def))
@@ -116,8 +117,11 @@ namespace AutoEquip
                     if (!pawn.outfits.forcedHandler.AllowedToAutomaticallyDrop(wornApparel))
                         return false;
                     gain -= this.ApparelScoreRaw(wornApparel);
+                    dropAny = true;
                 }
             }
+            if (!dropAny)
+                gain = Math.Max(gain, 0.0001f);
 
             return true;
         }
@@ -127,7 +131,7 @@ namespace AutoEquip
             float num = this.ApparelScoreRawStats(ap);
             num *= JobGiver_OptimizeApparelAutoEquip.ApparelScoreRawHitPointAjust(ap);
             num *= this.ApparalScoreRawInsulationColdAjust(ap);
-            Log.Message("Apparel Raw Score: " + num.ToString("N5") + "      Pawn: " + this.pawn.ToString() + "  Apparel: " + ap.ToString());
+            //Log.Message("Apparel Raw Score: " + num.ToString("N5") + "      Pawn: " + this.pawn.ToString() + "  Apparel: " + ap.ToString());
             return num;
         }
 
@@ -264,11 +268,21 @@ namespace AutoEquip
                     }
                 }
 
-                Log.Message(" ");
-                Log.Message("Stats of Pawn " + this.pawn);
-                foreach (Saveable_Outfit_StatDef s in this.calculedStatDef)
-                    Log.Message("  * " + s.strength.ToString("N5") + " - " + s.statDef.label);
+                //Log.Message(" ");
+                //Log.Message("Stats of Pawn " + this.pawn);
+                //foreach (Saveable_Outfit_StatDef s in this.calculedStatDef)
+                //    Log.Message("  * " + s.strength.ToString("N5") + " - " + s.statDef.label);
             }
+        }
+
+        public void LooseConflict(Apparel apprel)
+        {
+#if LOG && CONFLICT
+            MapComponent_AutoEquip.logMessage.AppendLine("  Looser: " + this.pawn);
+#endif
+            this.optimized = false;
+            this.totalStats = null;
+            this.calculedApparel.Remove(apprel);
         }
     }
 }

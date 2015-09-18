@@ -116,6 +116,8 @@ namespace AutoEquip
             //yield return new KeyValuePair<StatDef, float>(StatDefOf.WorkTableWorkSpeedFactor, 0.1f);
         }
 
+        public static StringBuilder logMessage;
+
         public static MapComponent_AutoEquip Get
         {
             get
@@ -134,7 +136,7 @@ namespace AutoEquip
         public override void ExposeData()
         {
             Scribe_Collections.LookList(ref this.outfitCache, "outfits", LookMode.Deep);
-            Scribe_Collections.LookList(ref this.pawnCache, "pawnCache", LookMode.Deep);
+            //Scribe_Collections.LookList(ref this.pawnCache, "pawnCache", LookMode.Deep);
             Scribe_Values.LookValue(ref this.nextOptimization, "nextOptimization", 0);
             base.ExposeData();
 
@@ -182,7 +184,9 @@ namespace AutoEquip
                 return;
 
 #if LOG
-            Log.Message("Start Scaning Best Apparel");
+            MapComponent_AutoEquip.logMessage = new StringBuilder();
+            MapComponent_AutoEquip.logMessage.AppendLine("Start Scaning Best Apparel");
+            MapComponent_AutoEquip.logMessage.AppendLine();
 #endif
 
             this.pawnCache = new List<Saveable_PawnNextApparelConfiguration>();
@@ -218,11 +222,11 @@ namespace AutoEquip
                 {
                     pawnConfiguration.OptimeFromList(ref changed);
 
-#if LOG
-                    Log.Message("Optimization For Pawn: " + pawnConfiguration.pawn);
+#if LOG && PARTIAL_OPTIMIZE
+                    MapComponent_AutoEquip.logMessage.AppendLine("Optimization For Pawn: " + pawnConfiguration.pawn);
                     foreach (Apparel ap in pawnConfiguration.calculedApparel)
-                        Log.Message("    * Apparel: " + ap);
-                    Log.Message(" ");
+                        MapComponent_AutoEquip.logMessage.AppendLine("    * Apparel: " + ap);
+                    MapComponent_AutoEquip.logMessage.AppendLine();
 #endif
                 }
 
@@ -244,9 +248,20 @@ namespace AutoEquip
                             {
                                 if (otherApprel == apprel)
                                 {
-#if LOG
-                                    Log.Message("Conflict " + apprel);                                    
+#if LOG && CONFLICT
+                                    MapComponent_AutoEquip.logMessage.AppendLine("Conflict " + apprel);                                    
 #endif
+                                    if (pawnConfiguration.pawn.apparel.WornApparel.Contains(apprel))
+                                    {
+                                        otherPawn.LooseConflict(apprel);
+                                        break;
+                                    }
+
+                                    if (otherPawn.pawn.apparel.WornApparel.Contains(apprel))
+                                    {
+                                        pawnConfiguration.LooseConflict(apprel);
+                                        break;
+                                    }
 
                                     if (!apparalGainPercentual.HasValue)
                                     {
@@ -266,22 +281,12 @@ namespace AutoEquip
 
                                     if (apparalGainPercentual.Value > otherApparalGainPercentual)
                                     {
-#if LOG
-                                        Log.Message("Looser: " + otherPawn.pawn);
-#endif
-                                        otherPawn.optimized = false;
-                                        otherPawn.totalStats = null;
-                                        otherPawn.calculedApparel.Remove(apprel);
+                                        otherPawn.LooseConflict(apprel);
                                         break;
                                     }
                                     else
                                     {
-#if LOG
-                                        Log.Message("Looser: " + pawnConfiguration.pawn);
-#endif
-                                        pawnConfiguration.optimized = false;
-                                        pawnConfiguration.totalStats = null;
-                                        pawnConfiguration.calculedApparel.Remove(apprel);
+                                        pawnConfiguration.LooseConflict(apprel);
                                         break;
                                     }
                                 }
@@ -315,6 +320,20 @@ namespace AutoEquip
                 foreach (Apparel ap in pawnApparel)
                     pawnConfiguration.toDropApparel.Add(ap);
 
+#if LOG && CHANGES
+                if (pawnConfiguration.toWearApparel.Any() || pawnConfiguration.toDropApparel.Any())
+                {
+                    MapComponent_AutoEquip.logMessage.AppendLine();
+                    MapComponent_AutoEquip.logMessage.AppendLine("Apparel Change for: " + pawnConfiguration.pawn);
+
+                    foreach (Apparel ap in pawnConfiguration.toDropApparel)
+                        MapComponent_AutoEquip.logMessage.AppendLine(" * Drop: " + ap);
+
+                    foreach (Apparel ap in pawnConfiguration.toWearApparel)
+                        MapComponent_AutoEquip.logMessage.AppendLine(" * Wear: " + ap);
+                }
+#endif
+
                 pawnConfiguration.calculedApparel = null;
                 pawnConfiguration.fixedApparels = null;
                 pawnConfiguration.allApparels = null;
@@ -323,6 +342,9 @@ namespace AutoEquip
             }
 
 #if LOG
+            Log.Message(MapComponent_AutoEquip.logMessage.ToString());
+            MapComponent_AutoEquip.logMessage = null;
+
             this.nextOptimization = Find.TickManager.TicksGame + 500;
 #else
             this.nextOptimization = Find.TickManager.TicksGame + 3000;
