@@ -146,12 +146,7 @@ namespace AutoEquip
             {
                 try
                 {
-                    float nint = ap.GetStatValue(stat.statDef, true);
-                    nint += ap.def.equippedStatOffsets.GetStatOffsetFromList(stat.statDef);
-
-                    if (ApparelScoreRawStatsHandlers != null)
-                        ApparelScoreRawStatsHandlers(pawn, ap, stat.statDef, ref nint);
-
+                    float nint = GetStatValue(ap, stat);
                     num += nint * stat.strength;
                     count++;
                 }
@@ -161,6 +156,21 @@ namespace AutoEquip
                 }
             }
             return num / count;
+        }
+
+        public float GetStatValue(Apparel ap, Saveable_Outfit_StatDef stat)
+        {
+            float baseStat = ap.GetStatValue(stat.statDef, true);
+            float currentStat = baseStat;
+            currentStat += ap.def.equippedStatOffsets.GetStatOffsetFromList(stat.statDef);
+
+            if (ApparelScoreRawStatsHandlers != null)
+                ApparelScoreRawStatsHandlers(pawn, ap, stat.statDef, ref currentStat);
+
+            if (baseStat == 0)
+                return currentStat;
+            else
+                return currentStat / baseStat;
         }
 
         public float ApparalScoreRawInsulationColdAjust(Apparel ap)
@@ -267,6 +277,8 @@ namespace AutoEquip
                             statdef.strength = Math.Max(statdef.strength, stat.Value * priorityAjust);
                     }
                 }
+
+                this.calculedStatDef = new List<Saveable_Outfit_StatDef>(this.calculedStatDef.OrderByDescending(i => Math.Abs(i.strength)));
 
                 //Log.Message(" ");
                 //Log.Message("Stats of Pawn " + this.pawn);

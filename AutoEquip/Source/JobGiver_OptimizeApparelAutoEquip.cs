@@ -81,7 +81,7 @@ namespace AutoEquip
 #if LOG && JOBS
                 Log.Message("Pawn " + pawn + " wear apparel: " + ap);
 #endif
-
+                                    configurarion.toWearApparel.Remove(ap);
                                     return new Job(JobDefOf.Wear, ap);
                                 }
                             }

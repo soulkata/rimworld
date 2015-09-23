@@ -168,7 +168,10 @@ namespace AutoEquip
             float num = rect.width - 2f;
             Rect rect2 = new Rect(rect.x + 1f, rect.y + 1f, num / 2f, 24f);
             if (Widgets.TextButton(rect2, "ClearAll".Translate(), true, false))
+            {
+                MapComponent_AutoEquip.Get.nextOptimization = 0;
                 stats.Clear();
+            }
 
             rect.yMin = rect2.yMax;
             rect2 = new Rect(rect.x + 5f, rect.y + 1f, rect.width - 2f - 16f - 8f, 20f);
@@ -216,14 +219,25 @@ namespace AutoEquip
                         outfitStat.strength = 0;
                     }
                     if (!stats.Contains(outfitStat))
+                    {
                         stats.Add(outfitStat);
+                        MapComponent_AutoEquip.Get.nextOptimization = 0;
+                    }
 
-                    outfitStat.strength = listing_Standard.DoSlider(outfitStat.strength, -1f, 1f);
+                    float n = listing_Standard.DoSlider(outfitStat.strength, -1f, 1f);
+                    if (n != outfitStat.strength)
+                    {
+                        MapComponent_AutoEquip.Get.nextOptimization = 0;
+                        outfitStat.strength = n;
+                    }
                 }
                 else
-                {                    
+                {
                     if (stats.Contains(outfitStat))
+                    {
+                        MapComponent_AutoEquip.Get.nextOptimization = 0;
                         stats.Remove(outfitStat);
+                    }
                     outfitStat = null;
                 }
             }

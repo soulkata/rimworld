@@ -25,7 +25,7 @@
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\..\RimWorld\Mods\AutoEquip\Assemblies\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;CHANGES; JOBS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -48,6 +48,8 @@
   <ItemGroup>
     <Compile Include="AutoEquipSettings.cs" />
     <Compile Include="Dialog_ManageOutfitsAutoEquip.cs" />
+    <Compile Include="Dialog_PawnApparelComparer.cs" />
+    <Compile Include="Dialog_PawnApparelDetail.cs" />
     <Compile Include="JobGiver_OptimizeApparelAutoEquip.cs" />
     <Compile Include="MainTabWindow_OutfitsAutoEquip.cs" />
     <Compile Include="MapComponent_AutoEquip.cs" />
@@ -55,6 +57,7 @@
     <Compile Include="Saveable_Outfit.cs" />
     <Compile Include="Saveable_Outfit_StatDef.cs" />
     <Compile Include="Saveable_PawnNextApparelConfiguration.cs" />
+    <Compile Include="Tab_Pawn_AutoEquip.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\Defs\MainTabDefs\MainTabs.xml">
