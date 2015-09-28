@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using UnityEngine;
 using Verse;
 
 namespace AutoEquip
@@ -300,10 +302,17 @@ namespace AutoEquip
 
                 foreach (Apparel pawnApparel in pawn.apparel.WornApparel)
                     if (pawn.outfits.forcedHandler.AllowedToAutomaticallyDrop(pawnApparel))
-                        allApparels.Add(pawnApparel);
+                        allApparels.Insert(0, pawnApparel);
                     else
                         pawnConfiguration.fixedApparels.Add(pawnApparel);
             }
+
+#if LOG && ALLAPPARELS
+            MapComponent_AutoEquip.logMessage.AppendLine("All Apparels");
+            foreach (Apparel a in allApparels)
+                MapComponent_AutoEquip.logMessage.AppendLine("   " + a.LabelCap);
+            MapComponent_AutoEquip.logMessage.AppendLine();
+#endif
 
             foreach (Saveable_PawnNextApparelConfiguration pawnConfiguration in this.pawnCache)
             {
@@ -311,6 +320,7 @@ namespace AutoEquip
                 pawnConfiguration.allApparels = new List<Apparel>(allApparels);
                 pawnConfiguration.calculedApparel = new List<Apparel>(pawnConfiguration.fixedApparels);
                 pawnConfiguration.optimized = false;
+                pawnConfiguration.CalculateNeededWarmth(GenDate.CurrentMonth);
             }
 
             while (true)
@@ -321,15 +331,15 @@ namespace AutoEquip
                     pawnConfiguration.OptimeFromList(ref changed);
 
 #if LOG && PARTIAL_OPTIMIZE
-                    MapComponent_AutoEquip.logMessage.AppendLine("Optimization For Pawn: " + pawnConfiguration.pawn);
+                    MapComponent_AutoEquip.logMessage.AppendLine("Optimization For Pawn: " + pawnConfiguration.pawn.LabelCap);
                     foreach (Apparel ap in pawnConfiguration.calculedApparel)
-                        MapComponent_AutoEquip.logMessage.AppendLine("    * Apparel: " + ap);
+                        MapComponent_AutoEquip.logMessage.AppendLine("    * Apparel: " + ap.LabelCap);
                     MapComponent_AutoEquip.logMessage.AppendLine();
 #endif
                 }
 
-                if (!changed)
-                    break;
+                //if (!changed)
+                //    break;
 
                 foreach (Saveable_PawnNextApparelConfiguration pawnConfiguration in this.pawnCache)
                 {
@@ -346,21 +356,6 @@ namespace AutoEquip
                             {
                                 if (otherApprel == apprel)
                                 {
-#if LOG && CONFLICT
-                                    MapComponent_AutoEquip.logMessage.AppendLine("Conflict " + apprel);                                    
-#endif
-                                    //if (pawnConfiguration.pawn.apparel.WornApparel.Contains(apprel))
-                                    //{
-                                    //    otherPawn.LooseConflict(apprel);
-                                    //    break;
-                                    //}
-
-                                    //if (otherPawn.pawn.apparel.WornApparel.Contains(apprel))
-                                    //{
-                                    //    pawnConfiguration.LooseConflict(apprel);
-                                    //    break;
-                                    //}
-
                                     if (!apparalGainPercentual.HasValue)
                                     {
                                         pawnConfiguration.NormalizeTotalStats();
@@ -370,7 +365,7 @@ namespace AutoEquip
                                         apparalGainPercentual = pawnConfiguration.totalStats.Value / noStats;
 
                                         if (pawnConfiguration.pawn.apparel.WornApparel.Contains(apprel))
-                                            apparalGainPercentual *= 1.3f;
+                                            apparalGainPercentual *= 1.01f;
                                     }
 
                                     otherPawn.NormalizeTotalStats();
@@ -381,15 +376,21 @@ namespace AutoEquip
                                     float otherApparalGainPercentual = otherPawn.totalStats.Value / otherNoStats;
 
                                     if (otherPawn.pawn.apparel.WornApparel.Contains(apprel))
-                                        otherApparalGainPercentual *= 1.3f;
+                                        otherApparalGainPercentual *= 1.01f;
 
                                     if (apparalGainPercentual.Value > otherApparalGainPercentual)
                                     {
+#if LOG && CONFLICT
+                                        MapComponent_AutoEquip.logMessage.AppendLine("Conflict: " + apprel.LabelCap + "   Winner: " + pawnConfiguration.pawn.LabelCap + " Looser: " + otherPawn.pawn.LabelCap);
+#endif
                                         otherPawn.LooseConflict(apprel);
                                         break;
                                     }
                                     else
                                     {
+#if LOG && CONFLICT
+                                        MapComponent_AutoEquip.logMessage.AppendLine("Conflict: " + apprel.LabelCap + "   Winner: " + otherPawn.pawn.LabelCap + " Looser: " + pawnConfiguration.pawn.LabelCap);
+#endif
                                         pawnConfiguration.LooseConflict(apprel);
                                         break;
                                     }
@@ -405,6 +406,13 @@ namespace AutoEquip
                             break;
                     }
                 }
+
+                if (!this.pawnCache.Where(i => !i.optimized).Any())
+                    break;
+
+#if LOG && CONFLICT
+                MapComponent_AutoEquip.logMessage.AppendLine();
+#endif
             }
 
             foreach (Saveable_PawnNextApparelConfiguration pawnConfiguration in this.pawnCache)
@@ -445,8 +453,12 @@ namespace AutoEquip
             }
 
 #if LOG
+            Type T = typeof(GUIUtility);
+            PropertyInfo systemCopyBufferProperty = T.GetProperty("systemCopyBuffer", BindingFlags.Static | BindingFlags.NonPublic);
+            systemCopyBufferProperty.SetValue(null, MapComponent_AutoEquip.logMessage.ToString(), null);
+
             Log.Message(MapComponent_AutoEquip.logMessage.ToString());
-            MapComponent_AutoEquip.logMessage = null;
+            MapComponent_AutoEquip.logMessage = null;            
 
             this.nextOptimization = Find.TickManager.TicksGame + 500;
 #else

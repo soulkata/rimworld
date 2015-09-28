@@ -83,7 +83,7 @@ namespace AutoEquip
                 if ((conf.toWearApparel != null) &&
                     (conf.toWearApparel.Any()))
                 {
-                    Widgets.ListSeparator(ref num, viewRect.width, "To Wear".Translate());
+                    Widgets.ListSeparator(ref num, viewRect.width, "ToWear".Translate());
                     foreach (Apparel current2 in from ap in conf.toWearApparel
                                                  orderby ap.def.apparel.bodyPartGroups[0].listOrder descending
                                                  select ap)
@@ -93,7 +93,7 @@ namespace AutoEquip
                 if ((conf.toDropApparel != null) &&
                     (conf.toDropApparel.Any()))
                 {
-                    Widgets.ListSeparator(ref num, viewRect.width, "To Drop".Translate());
+                    Widgets.ListSeparator(ref num, viewRect.width, "ToDrop".Translate());
                     foreach (Apparel current2 in from ap in conf.toDropApparel
                                                  orderby ap.def.apparel.bodyPartGroups[0].listOrder descending
                                                  select ap)
@@ -123,44 +123,44 @@ namespace AutoEquip
                 GUI.color = ITab_Pawn_AutoEquip.HighlightColor;
 				GUI.DrawTexture(rect, TexUI.HighlightTex);
 			}
-			if (Widgets.InvisibleButton(rect) && Event.current.button == 1)
-			{
-				List<FloatMenuOption> list = new List<FloatMenuOption>();
-				list.Add(new FloatMenuOption("ThingInfo".Translate(), delegate
-				{
-					Find.WindowStack.Add(new Dialog_InfoCard(thing));
-				}, MenuOptionPriority.Medium, null, null));
+            if (Widgets.InvisibleButton(rect) && Event.current.button == 1)
+            {
+                List<FloatMenuOption> list = new List<FloatMenuOption>();
+                list.Add(new FloatMenuOption("ThingInfo".Translate(), delegate
+                {
+                    Find.WindowStack.Add(new Dialog_InfoCard(thing));
+                }, MenuOptionPriority.Medium, null, null));
                 if (this.CanEdit && equiped)
-				{
-					Action action = null;
-					ThingWithComps eq = thing as ThingWithComps;
-					Apparel ap = thing as Apparel;
-					if (ap != null)
-					{
-						Apparel unused;
-						action = delegate
-						{
-							this.SelPawnForGear.apparel.TryDrop(ap, out unused, this.SelPawnForGear.Position, true);
-						};
-					}
-					else if (eq != null && this.SelPawnForGear.equipment.AllEquipment.Contains(eq))
-					{
-						ThingWithComps unused;
-						action = delegate
-						{
-							this.SelPawnForGear.equipment.TryDropEquipment(eq, out unused, this.SelPawnForGear.Position, true);
-						};
-					}
-					else if (!thing.def.destroyOnDrop)
-					{
-						Thing unused;
-						action = delegate
-						{
-							this.SelPawnForGear.inventory.container.TryDrop(thing, this.SelPawnForGear.Position, ThingPlaceMode.Near, out unused);
-						};
-					}
-					list.Add(new FloatMenuOption("DropThing".Translate(), action, MenuOptionPriority.Medium, null, null));
-				}
+                {
+                    Action action = null;
+                    ThingWithComps eq = thing as ThingWithComps;
+                    Apparel ap = thing as Apparel;
+                    if (ap != null)
+                    {
+                        Apparel unused;
+                        action = delegate
+                        {
+                            this.SelPawnForGear.apparel.TryDrop(ap, out unused, this.SelPawnForGear.Position, true);
+                        };
+                    }
+                    else if (eq != null && this.SelPawnForGear.equipment.AllEquipment.Contains(eq))
+                    {
+                        ThingWithComps unused;
+                        action = delegate
+                        {
+                            this.SelPawnForGear.equipment.TryDropEquipment(eq, out unused, this.SelPawnForGear.Position, true);
+                        };
+                    }
+                    else if (!thing.def.destroyOnDrop)
+                    {
+                        Thing unused;
+                        action = delegate
+                        {
+                            this.SelPawnForGear.inventory.container.TryDrop(thing, this.SelPawnForGear.Position, ThingPlaceMode.Near, out unused);
+                        };
+                    }
+                    list.Add(new FloatMenuOption("DropThing".Translate(), action, MenuOptionPriority.Medium, null, null));
+                }
 
                 if ((conf != null) &&
                     (thing is Apparel))
@@ -205,12 +205,12 @@ namespace AutoEquip
                     list.Add(new FloatMenuOption("AutoEquip Comparer", delegate
                     {
                         Find.WindowStack.Add(new Dialog_PawnApparelComparer(conf.pawn, (Apparel)thing));
-                    }, MenuOptionPriority.Medium, null, null));                    
+                    }, MenuOptionPriority.Medium, null, null));
                 }
 
-				FloatMenu window = new FloatMenu(list, thing.LabelCap, false, false);
-				Find.WindowStack.Add(window);
-			}
+                FloatMenu window = new FloatMenu(list, thing.LabelCap, false, false);
+                Find.WindowStack.Add(window);
+            }
 			if (thing.def.DrawMatSingle != null && thing.def.DrawMatSingle.mainTexture != null)
 			{
 				Widgets.ThingIcon(new Rect(4f, y, 28f, 28f), thing);
@@ -221,13 +221,12 @@ namespace AutoEquip
 			string text = thing.LabelCap;
             if (thing is Apparel)
             {
-                if (conf != null)
+                if ((conf != null) &&
+                    (conf.calculedApparel != null))
                     text = conf.ApparelScoreRaw((Apparel)thing).ToString("N5") + "   " + text;
 
                 if (this.SelPawnForGear.outfits != null && this.SelPawnForGear.outfits.forcedHandler.IsForced((Apparel)thing))
-                {
                     text = text + ", " + "ApparelForcedLower".Translate();
-                }
             }
 			Widgets.Label(rect2, text);
 			y += 28f;

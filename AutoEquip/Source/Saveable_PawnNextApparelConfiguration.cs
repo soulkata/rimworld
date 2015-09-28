@@ -24,7 +24,8 @@ namespace AutoEquip
         public List<Apparel> fixedApparels;
         public List<Apparel> allApparels;
         public Outfit outfit;
-        public NeededWarmth needWarm;
+        public float needWarmCurve;
+        public float needCoolCurve;
         public float? totalStats = null;
         public List<Saveable_Outfit_StatDef> calculedStatDef;
 
@@ -36,18 +37,33 @@ namespace AutoEquip
 
         public void CalculateNeededWarmth(Month month)
         {
-            float num = GenTemperature.AverageTemperatureAtWorldCoordsForMonth(Find.Map.WorldCoords, month);
-            if (num < this.GetStatValueAbstract(StatDefOf.ComfyTemperatureMin) - 4f)
-            {
-                this.needWarm = NeededWarmth.Warm;
-                return;
-            }
-            if (num > this.GetStatValueAbstract(StatDefOf.ComfyTemperatureMin) + 4f)
-            {
-                this.needWarm = NeededWarmth.Cool;
-                return;
-            }
-            this.needWarm = NeededWarmth.Any;
+            float num = (GenTemperature.OutdoorTemp + GenTemperature.AverageTemperatureAtWorldCoordsForMonth(Find.Map.WorldCoords, month) * 2) / 3;
+            float stat = this.GetStatValueAbstract(StatDefOf.ComfyTemperatureMin);
+
+            this.needWarmCurve = new SimpleCurve
+                {
+                    new CurvePoint(stat - 10f, 1.5f),
+                    new CurvePoint(stat - 4f, 1f),
+                    new CurvePoint(stat, 0.5f), 
+                    new CurvePoint(stat + 4f, 0.2f), 
+                    new CurvePoint(stat + 10f, 0.0f)
+                }.Evaluate(num);
+
+            stat = this.GetStatValueAbstract(StatDefOf.ComfyTemperatureMax);
+            this.needCoolCurve = new SimpleCurve 
+                {
+                    new CurvePoint(stat - 10f, 0.0f), 
+                    new CurvePoint(stat - 4f, 0.2f), 
+                    new CurvePoint(stat, 0.5f), 
+                    new CurvePoint(stat + 4f, 1f), 
+                    new CurvePoint(stat + 10f, 1.5f) 
+                }.Evaluate(num);
+
+            //Log.Message("Pawn: " + this.pawn.LabelCap + "     Temp: " + num + Environment.NewLine +
+            //    "     MinTemp: " + this.GetStatValueAbstract(StatDefOf.ComfyTemperatureMin) + Environment.NewLine +
+            //    "     MinCurv: " + this.needWarmCurve + Environment.NewLine +
+            //    "     MaxTemp: " + this.GetStatValueAbstract(StatDefOf.ComfyTemperatureMax) + Environment.NewLine +
+            //    "     MaxCurv: " + this.needCoolCurve + Environment.NewLine);
         }        
 
         public float GetStatValueAbstract(StatDef stat)
@@ -64,8 +80,7 @@ namespace AutoEquip
             {
                 Apparel changeApparel = null;
                 float changeApparelScore = 0;
-
-                this.CalculateNeededWarmth(GenDate.CurrentMonth);
+                
                 Outfit currentOutfit = this.pawn.outfits.CurrentOutfit;
 
                 foreach (Apparel apparel in this.allApparels)
@@ -109,7 +124,7 @@ namespace AutoEquip
             }
 
             gain = this.ApparelScoreRaw(ap);
-            bool dropAny = false;
+            //bool dropAny = false;
             foreach (Apparel wornApparel in this.calculedApparel)
             {
                 if (!ApparelUtility.CanWearTogether(wornApparel.def, ap.def))
@@ -117,22 +132,29 @@ namespace AutoEquip
                     if (!pawn.outfits.forcedHandler.AllowedToAutomaticallyDrop(wornApparel))
                         return false;
                     gain -= this.ApparelScoreRaw(wornApparel);
-                    dropAny = true;
+                    //dropAny = true;
                 }
             }
-            if (!dropAny)
-                gain = Math.Max(gain, 0.0001f);
+            //if (!dropAny)
+            //    gain = Math.Max(gain, 0.0001f);
 
             return true;
         }
 
         public float ApparelScoreRaw(Apparel ap)
         {
-            float num = this.ApparelScoreRawStats(ap);
-            num *= JobGiver_OptimizeApparelAutoEquip.ApparelScoreRawHitPointAjust(ap);
-            num *= this.ApparalScoreRawInsulationColdAjust(ap);
-            //Log.Message("Apparel Raw Score: " + num.ToString("N5") + "      Pawn: " + this.pawn.ToString() + "  Apparel: " + ap.ToString());
-            return num;
+            return this.ApparelScoreRawStats(ap)
+                * this.ApparelModifierRaw(ap);
+        }
+
+        public float ApparelModifierRaw(Apparel ap)
+        {
+            float modHit = this.ApparelScoreRawHitPointAjust(ap);
+            float modCold = this.ApparalScoreRawInsulationColdAjust(ap);
+            if ((modHit < 0) && (modCold < 0))
+                return modHit * modCold * -1;
+            else
+                return modHit * modCold;
         }
 
         public delegate void ApparelScoreRawStatsHandler(Pawn pawn, Apparel apparel, StatDef statDef, ref float num);
@@ -140,8 +162,8 @@ namespace AutoEquip
 
         public float ApparelScoreRawStats(Apparel ap)
         {
-            float num = 0.1f;
-            float count = 0.0f;
+            float num = 1.0f;
+            float count = 1.0f;
             foreach (Saveable_Outfit_StatDef stat in this.GetStats())
             {
                 try
@@ -173,13 +195,29 @@ namespace AutoEquip
                 return currentStat / baseStat;
         }
 
+        public float ApparelScoreRawHitPointAjust(Apparel ap)
+        {
+            if (ap.def.useHitPoints)
+            {
+                float x = (float)ap.HitPoints / (float)ap.MaxHitPoints;
+                return JobGiver_OptimizeApparelAutoEquip.HitPointsPercentScoreFactorCurve.Evaluate(x);
+            }
+            else
+                return 1;
+        }
+
         public float ApparalScoreRawInsulationColdAjust(Apparel ap)
         {
             float num3 = 1f;
-            if (this.needWarm == NeededWarmth.Warm)
+            if (this.needWarmCurve != 0)
             {
-                float statValueAbstract = ap.def.GetStatValueAbstract(StatDefOf.Insulation_Cold, null);
-                num3 *= JobGiver_OptimizeApparelAutoEquip.InsulationColdScoreFactorCurve_NeedWarm.Evaluate(statValueAbstract);
+                float statValueAbstract = ap.GetStatValue(StatDefOf.Insulation_Cold);
+                num3 *= JobGiver_OptimizeApparelAutoEquip.InsulationColdScoreFactorCurve_NeedWarm.Evaluate(statValueAbstract) * this.needWarmCurve;
+            }
+            if (this.needCoolCurve != 0)
+            {
+                float statValueAbstract = ap.GetStatValue(StatDefOf.Insulation_Heat);
+                num3 *= JobGiver_OptimizeApparelAutoEquip.InsulationColdScoreFactorCurve_NeedCold.Evaluate(statValueAbstract) * this.needCoolCurve;
             }
             return num3;
         }
@@ -289,11 +327,10 @@ namespace AutoEquip
 
         public void LooseConflict(Apparel apprel)
         {
-#if LOG && CONFLICT
-            MapComponent_AutoEquip.logMessage.AppendLine("  Looser: " + this.pawn);
-#endif
             this.optimized = false;
             this.totalStats = null;
+            if (!this.calculedApparel.Remove(apprel))
+                Log.Warning("Warning on LooseConflict loser didnt have the apparel");
             this.calculedApparel.Remove(apprel);
         }
     }

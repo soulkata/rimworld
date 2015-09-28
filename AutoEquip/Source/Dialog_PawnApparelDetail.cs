@@ -58,7 +58,7 @@ namespace AutoEquip
             Widgets.DrawLineHorizontal(groupRect.xMin, groupRect.yMin, groupRect.width);
             groupRect.yMin += 4f;
             groupRect.height -= 4f;
-            groupRect.height -= Text.LineHeight * 1.2f * 3f;
+            groupRect.height -= Text.LineHeight * 1.2f * 3f + 5f;
 
             Rect viewRect = new Rect(groupRect.xMin, groupRect.yMin, groupRect.width - 16f, conf.calculedStatDef.Count * Text.LineHeight * 1.2f + 16f);
             if (viewRect.height < groupRect.height)
@@ -93,22 +93,31 @@ namespace AutoEquip
 
             itemRect = new Rect(listRect.xMin, groupRect.yMax, listRect.width, Text.LineHeight * 1.2f);
             this.DrawLine(ref itemRect,
-                "Average", labelWidth,
+                "AverageStat".Translate(), labelWidth,
                 conf.calculedStatDef.Average(i => conf.GetStatValue(apparel, i)).ToString("N3"), baseValue,
                 "", multiplierWidth,
                 conf.ApparelScoreRawStats(apparel).ToString("N5"), finalValue);
 
-            itemRect = new Rect(listRect.xMin, itemRect.yMax, listRect.width, Text.LineHeight * 1.2f);
-            this.DrawLine(ref itemRect,
-                "Hit Points", labelWidth,
-                JobGiver_OptimizeApparelAutoEquip.ApparelScoreRawHitPointAjust(apparel).ToString("N3"), baseValue,
-                "", multiplierWidth,
-                (conf.ApparelScoreRawStats(apparel) * JobGiver_OptimizeApparelAutoEquip.ApparelScoreRawHitPointAjust(apparel)).ToString("N5"), finalValue);
+            itemRect.yMax += 5;
 
             itemRect = new Rect(listRect.xMin, itemRect.yMax, listRect.width, Text.LineHeight * 1.2f);
             this.DrawLine(ref itemRect,
-                "Temperature", labelWidth,
+                "AutoEquipHitPoints".Translate(), labelWidth,
+                conf.ApparelScoreRawHitPointAjust(apparel).ToString("N3"), baseValue,
+                "", multiplierWidth,
+                "", finalValue);
+
+            itemRect = new Rect(listRect.xMin, itemRect.yMax, listRect.width, Text.LineHeight * 1.2f);
+            this.DrawLine(ref itemRect,
+                "AutoEquipTemperature".Translate(), labelWidth,
                 conf.ApparalScoreRawInsulationColdAjust(apparel).ToString("N3"), baseValue,
+                "", multiplierWidth,
+                "", finalValue);
+
+            itemRect = new Rect(listRect.xMin, itemRect.yMax, listRect.width, Text.LineHeight * 1.2f);
+            this.DrawLine(ref itemRect,
+                "AutoEquipTotal".Translate(), labelWidth,
+                conf.ApparelModifierRaw(apparel).ToString("N3"), baseValue,
                 "", multiplierWidth,
                 conf.ApparelScoreRaw(apparel).ToString("N5"), finalValue);
 

@@ -25,7 +25,7 @@
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\..\RimWorld\Mods\AutoEquip\Assemblies\</OutputPath>
-    <DefineConstants>TRACE;CHANGES; JOBS</DefineConstants>
+    <DefineConstants>TRACE;_LOG; CHANGES_; JOBS_; CONFLICT; ALLAPPARELS; PARTIAL_OPTIMIZE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -65,6 +65,9 @@
     </Content>
     <Content Include="..\Defs\ThinkTreeDefs\Humanlike.xml">
       <Link>AlienAntsThinkTree.xml</Link>
+    </Content>
+    <Content Include="..\Languages\English\Keyed\AutoEquip.xml">
+      <Link>AutoEquip.xml</Link>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
