@@ -41,8 +41,95 @@ namespace AutoEquip
             this.outfit = pawn.outfits.CurrentOutfit;
             this.stats = saveablePawn.NormalizeCalculedStatDef().ToArray();
 
-            this.needWarmCurve = new SimpleCurve { new CurvePoint(-100f, 1f), new CurvePoint(100f, 1f) };
-            this.needCoolCurve = new SimpleCurve { new CurvePoint(-100f, 1f), new CurvePoint(100f, 1f) };
+            temperatureAjust = 20;
+
+            float targetTemperature = GenTemperature.AverageTemperatureAtWorldCoordsForMonth(Find.Map.WorldCoords, month) + temperatureAjust;
+
+            #region [  needWarmCurve  ]
+
+            float stat = this.pawn.def.GetStatValueAbstract(StatDefOf.ComfyTemperatureMin, null);
+
+            stat = targetTemperature - stat;
+
+            if (stat > 10f)
+                this.needWarmCurve = new SimpleCurve { new CurvePoint(0f, 1f) };
+            else
+                if (stat > 3f)
+                    this.needWarmCurve = new SimpleCurve 
+                        {
+                            new CurvePoint(+10f, -1.00f), 
+                            new CurvePoint(+03f, +0.00f), 
+                            new CurvePoint(+00f, +1.00f), 
+                            new CurvePoint(-03f, +1.10f) 
+                        };
+                else
+                    if (stat > 0)
+                        this.needCoolCurve = new SimpleCurve 
+                            {
+                                new CurvePoint(+03f, -1.00f), 
+                                new CurvePoint(+01f, -1.00f), 
+                                new CurvePoint(+00f, +1.00f), 
+                                new CurvePoint(-03f, +1.20f), 
+                                new CurvePoint(-10f, +1.50f) 
+                            };
+                    else
+                        if (stat > -3)
+                            this.needCoolCurve = new SimpleCurve 
+                            {
+                                new CurvePoint(+03f, -1.00f), 
+                                new CurvePoint(+01f, -1.00f), 
+                                new CurvePoint(+00f, +1.00f), 
+                                new CurvePoint(-03f, +1.20f), 
+                                new CurvePoint(-100f, +2.00f) 
+                            };
+                        else
+                            this.needCoolCurve = new SimpleCurve 
+                                {
+                                    new CurvePoint(+01f, -1.00f), 
+                                    new CurvePoint(+00f, +1.00f), 
+                                    new CurvePoint(-03f, +1.50f), 
+                                    new CurvePoint(-100f, +20.00f) 
+                                };
+
+            #endregion
+
+            #region [  needCoolCurve  ]            
+
+            stat = this.pawn.def.GetStatValueAbstract(StatDefOf.ComfyTemperatureMax, null);
+
+            stat = targetTemperature - stat;
+
+            if (stat < -10)
+                this.needCoolCurve = new SimpleCurve { new CurvePoint(0f, 1f) };
+            else
+                if (stat < -3)
+                    this.needCoolCurve = new SimpleCurve 
+                        {
+                            new CurvePoint(-10f, -1.00f), 
+                            new CurvePoint(-03f, +0.00f), 
+                            new CurvePoint(+00f, +1.00f), 
+                            new CurvePoint(+03f, +1.10f) 
+                        };
+                else
+                    if (stat < 0)
+                        this.needCoolCurve = new SimpleCurve 
+                            {
+                                new CurvePoint(-03f, -1.00f), 
+                                new CurvePoint(-01f, -1.00f), 
+                                new CurvePoint(+00f, +1.00f), 
+                                new CurvePoint(+03f, +1.20f), 
+                                new CurvePoint(+10f, +1.50f) 
+                            };
+                    else
+                        this.needCoolCurve = new SimpleCurve 
+                            {
+                                new CurvePoint(-01f, -1.00f), 
+                                new CurvePoint(+00f, +1.00f), 
+                                new CurvePoint(+03f, +1.50f), 
+                                new CurvePoint(+100f, +20.00f) 
+                            }; 
+
+            #endregion            
         }
 
         public string LabelCap { get { return this.pawn.LabelCap; } }
