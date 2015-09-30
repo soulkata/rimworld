@@ -52,7 +52,19 @@ namespace AutoEquip
 
 		protected override void FillTab()
 		{
-            Saveable_PawnNextApparelConfiguration conf = MapComponent_AutoEquip.Get.GetCache(this.SelPawnForGear);
+            Saveable_Pawn pawnSave;
+            PawnCalcForApparel pawnCalc;
+            if (this.SelPawnForGear.IsColonist)
+            {
+                pawnSave = MapComponent_AutoEquip.Get.GetCache(this.SelPawnForGear);
+                pawnCalc = new PawnCalcForApparel(pawnSave);
+            }
+            else
+            {
+                pawnSave = null;
+                pawnCalc = null;
+            }
+            
 			Text.Font = GameFont.Small;
 			Rect rect = new Rect(0f, 20f, this.size.x, this.size.y - 20f);
 			Rect rect2 = rect.ContractedBy(10f);
@@ -61,6 +73,34 @@ namespace AutoEquip
 			Text.Font = GameFont.Small;
 			GUI.color = Color.white;
 			Rect outRect = new Rect(0f, 0f, position.width, position.height);
+
+            if (pawnSave != null)
+            {
+                Rect rect3 = new Rect(outRect.xMin + 4f, outRect.yMin, 100f, 30f);
+                if (Widgets.TextButton(rect3, pawnSave.pawn.outfits.CurrentOutfit.label, true, false))
+                {
+                    List<FloatMenuOption> list = new List<FloatMenuOption>();
+                    foreach (Outfit current in Find.Map.outfitDatabase.AllOutfits)
+                    {
+                        Outfit localOut = current;
+                        list.Add(new FloatMenuOption(localOut.label, delegate
+                        {
+                            pawnSave.pawn.outfits.CurrentOutfit = localOut;
+                        }, MenuOptionPriority.Medium, null, null));
+                    }
+                    Find.WindowStack.Add(new FloatMenu(list, false));
+                }
+                rect3 = new Rect(rect3.xMax + 4f, outRect.yMin, 100f, 30f);
+                if (Widgets.TextButton(rect3, "AutoEquipStatus".Translate(), true, false))
+                {
+                    if (pawnSave.stats == null)
+                        pawnSave.stats = new List<Saveable_StatDef>();
+                    Find.WindowStack.Add(new Dialog_ManagePawnOutfit(pawnSave.stats));
+                }
+
+                outRect.yMin += rect3.height + 4f;
+            }
+
 			Rect viewRect = new Rect(0f, 0f, position.width - 16f, this.scrollViewHeight);
 			Widgets.BeginScrollView(outRect, ref this.scrollPosition, viewRect);
 			float num = 0f;
@@ -68,7 +108,7 @@ namespace AutoEquip
 			{
 				Widgets.ListSeparator(ref num, viewRect.width, "Equipment".Translate());
 				foreach (ThingWithComps current in this.SelPawnForGear.equipment.AllEquipment)
-                    this.DrawThingRow(ref num, viewRect.width, current, true, ITab_Pawn_AutoEquip.ThingLabelColor, conf);
+                    this.DrawThingRow(ref num, viewRect.width, current, true, ITab_Pawn_AutoEquip.ThingLabelColor, pawnSave, pawnCalc);
 			}
 			if (this.SelPawnForGear.apparel != null)
 			{
@@ -76,35 +116,35 @@ namespace AutoEquip
 				foreach (Apparel current2 in from ap in this.SelPawnForGear.apparel.WornApparel 
                                              orderby ap.def.apparel.bodyPartGroups[0].listOrder descending
                                              select ap)
-                    this.DrawThingRow(ref num, viewRect.width, current2, true, ITab_Pawn_AutoEquip.ThingLabelColor, conf);
-			}            
-            if (conf != null)
+                    this.DrawThingRow(ref num, viewRect.width, current2, true, ITab_Pawn_AutoEquip.ThingLabelColor, pawnSave, pawnCalc);
+			}
+            if (pawnSave != null)
             {
-                if ((conf.toWearApparel != null) &&
-                    (conf.toWearApparel.Any()))
+                if ((pawnSave.toWearApparel != null) &&
+                    (pawnSave.toWearApparel.Any()))
                 {
                     Widgets.ListSeparator(ref num, viewRect.width, "ToWear".Translate());
-                    foreach (Apparel current2 in from ap in conf.toWearApparel
+                    foreach (Apparel current2 in from ap in pawnSave.toWearApparel
                                                  orderby ap.def.apparel.bodyPartGroups[0].listOrder descending
                                                  select ap)
-                        this.DrawThingRow(ref num, viewRect.width, current2, false, ITab_Pawn_AutoEquip.ThingToEquipLabelColor, conf);
+                        this.DrawThingRow(ref num, viewRect.width, current2, false, ITab_Pawn_AutoEquip.ThingToEquipLabelColor, pawnSave, pawnCalc);
                 }
 
-                if ((conf.toDropApparel != null) &&
-                    (conf.toDropApparel.Any()))
+                if ((pawnSave.toDropApparel != null) &&
+                    (pawnSave.toDropApparel.Any()))
                 {
                     Widgets.ListSeparator(ref num, viewRect.width, "ToDrop".Translate());
-                    foreach (Apparel current2 in from ap in conf.toDropApparel
+                    foreach (Apparel current2 in from ap in pawnSave.toDropApparel
                                                  orderby ap.def.apparel.bodyPartGroups[0].listOrder descending
                                                  select ap)
-                        this.DrawThingRow(ref num, viewRect.width, current2, this.SelPawnForGear.apparel.WornApparel.Contains(current2), ITab_Pawn_AutoEquip.ThingToDropLabelColor, conf);
+                        this.DrawThingRow(ref num, viewRect.width, current2, this.SelPawnForGear.apparel.WornApparel.Contains(current2), ITab_Pawn_AutoEquip.ThingToDropLabelColor, pawnSave, pawnCalc);
                 }
             }
 			if (this.SelPawnForGear.inventory != null)
 			{
 				Widgets.ListSeparator(ref num, viewRect.width, "Inventory".Translate());
 				foreach (Thing current3 in this.SelPawnForGear.inventory.container)
-                    this.DrawThingRow(ref num, viewRect.width, current3, true, ITab_Pawn_AutoEquip.ThingLabelColor, conf);
+                    this.DrawThingRow(ref num, viewRect.width, current3, true, ITab_Pawn_AutoEquip.ThingLabelColor, pawnSave, pawnCalc);
 			}
 
 			if (Event.current.type == EventType.Layout)
@@ -115,7 +155,7 @@ namespace AutoEquip
 			Text.Anchor = TextAnchor.UpperLeft;
 		}
 
-        private void DrawThingRow(ref float y, float width, Thing thing, bool equiped, Color thingColor, Saveable_PawnNextApparelConfiguration conf)
+        private void DrawThingRow(ref float y, float width, Thing thing, bool equiped, Color thingColor, Saveable_Pawn pawnSave, PawnCalcForApparel pawnCalc)
 		{
 			Rect rect = new Rect(0f, y, width, 28f);
 			if (Mouse.IsOver(rect))
@@ -162,7 +202,7 @@ namespace AutoEquip
                     list.Add(new FloatMenuOption("DropThing".Translate(), action, MenuOptionPriority.Medium, null, null));
                 }
 
-                if ((conf != null) &&
+                if ((pawnSave != null) &&
                     (thing is Apparel))
                 {
                     if (!equiped)
@@ -199,12 +239,12 @@ namespace AutoEquip
                         }, MenuOptionPriority.Medium, null, null));
                     list.Add(new FloatMenuOption("AutoEquip Details", delegate
                     {
-                        Find.WindowStack.Add(new Dialog_PawnApparelDetail(conf.pawn, (Apparel)thing));
+                        Find.WindowStack.Add(new Dialog_PawnApparelDetail(pawnSave.pawn, (Apparel)thing));
                     }, MenuOptionPriority.Medium, null, null));
 
                     list.Add(new FloatMenuOption("AutoEquip Comparer", delegate
                     {
-                        Find.WindowStack.Add(new Dialog_PawnApparelComparer(conf.pawn, (Apparel)thing));
+                        Find.WindowStack.Add(new Dialog_PawnApparelComparer(pawnSave.pawn, (Apparel)thing));
                     }, MenuOptionPriority.Medium, null, null));
                 }
 
@@ -221,9 +261,9 @@ namespace AutoEquip
 			string text = thing.LabelCap;
             if (thing is Apparel)
             {
-                if ((conf != null) &&
-                    (conf.calculedApparel != null))
-                    text = conf.ApparelScoreRaw((Apparel)thing).ToString("N5") + "   " + text;
+                if ((pawnSave != null) &&
+                    (pawnSave.targetApparel != null))
+                    text = pawnCalc.CalculateApparelScoreRaw((Apparel)thing).ToString("N5") + "   " + text;
 
                 if (this.SelPawnForGear.outfits != null && this.SelPawnForGear.outfits.forcedHandler.IsForced((Apparel)thing))
                     text = text + ", " + "ApparelForcedLower".Translate();
