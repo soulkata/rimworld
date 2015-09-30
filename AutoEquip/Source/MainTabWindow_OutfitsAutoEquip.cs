@@ -30,9 +30,10 @@ namespace AutoEquip
             Text.Anchor = TextAnchor.UpperLeft;
             Rect rect = new Rect(5f, 5f, 160f, 35f);
             if (Widgets.TextButton(rect, "ManageOutfits".Translate(), true, false))
-            {
                 Find.WindowStack.Add(new Dialog_ManageOutfitsAutoEquip(null));
-            }
+            rect = new Rect(rect.xMax + 5f, 5f, rect.width, 35f);
+            //if (Widgets.TextButton(rect, "AutoEquipGlobalSelection".Translate(), true, false))
+            //    Find.WindowStack.Add(new Dialog_ManageOutfitsAutoEquip(null));
             Text.Anchor = TextAnchor.LowerCenter;
             Rect rect2 = new Rect(175f, 0f, position.width - 175f, position.height);
             Rect rect3 = new Rect(rect2.x, rect2.y, rect2.width / 2f, rect2.height);
@@ -62,19 +63,27 @@ namespace AutoEquip
                 }
                 Find.WindowStack.Add(new FloatMenu(list, false));
             }
-            Rect rect4 = new Rect(rect3.xMax + 4f, rect.y + 2f, 100f, rect.height - 4f);
-            if (Widgets.TextButton(rect4, "OutfitEdit".Translate(), true, false))
+            rect3 = new Rect(rect3.xMax + 4f, rect.y + 2f, 100f, rect.height - 4f);
+            if (Widgets.TextButton(rect3, "OutfitEdit".Translate(), true, false))
             {
                 Find.WindowStack.Add(new Dialog_ManageOutfitsAutoEquip(p.outfits.CurrentOutfit));
             }
-            Rect rect5 = new Rect(rect4.xMax + 4f, rect.y + 2f, 100f, rect.height - 4f);
+            rect3 = new Rect(rect3.xMax + 4f, rect.y + 2f, 100f, rect.height - 4f);
+            if (Widgets.TextButton(rect3, "AutoEquipStatus".Translate(), true, false))
+            {
+                Saveable_Pawn cx = MapComponent_AutoEquip.Get.GetCache(p);
+                if (cx.stats == null)
+                    cx.stats = new List<Saveable_StatDef>();
+                Find.WindowStack.Add(new Dialog_ManagePawnOutfit(cx.stats));
+            }
+            rect3 = new Rect(rect3.xMax + 4f, rect.y + 2f, 100f, rect.height - 4f);
             if (p.outfits.forcedHandler.SomethingIsForced)
             {
-                if (Widgets.TextButton(rect5, "ClearForcedApparel".Translate(), true, false))
+                if (Widgets.TextButton(rect3, "ClearForcedApparel".Translate(), true, false))
                 {
                     p.outfits.forcedHandler.Reset();
                 }
-                TooltipHandler.TipRegion(rect5, new TipSignal(delegate
+                TooltipHandler.TipRegion(rect3, new TipSignal(delegate
                 {
                     string text = "ForcedApparel".Translate() + ":\n";
                     foreach (Apparel current2 in p.outfits.forcedHandler.ForcedApparel)

@@ -6,4 +6,7 @@
   <AutoEquipHitPoints>Hit Points Modifier</AutoEquipHitPoints>
   <AutoEquipTemperature>Outdoor Temperature Modifier</AutoEquipTemperature>
   <AutoEquipTotal>Apparel Total Stat</AutoEquipTotal>
+  <AutoEquipGlobalSelection>Global Selection</AutoEquipGlobalSelection>
+  <AutoEquipAppendIndividualPawnStatus>Append Pawn Individual Status</AutoEquipAppendIndividualPawnStatus>
+  <AutoEquipStatus>Status...</AutoEquipStatus>
 </LanguageData>

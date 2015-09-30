@@ -33,7 +33,7 @@ namespace AutoEquip
             if (Find.TickManager.TicksGame < pawn.mindState.nextApparelOptimizeTick)
                 return null;
 
-            Saveable_PawnNextApparelConfiguration configurarion = MapComponent_AutoEquip.Get.GetCache(pawn);
+            Saveable_Pawn configurarion = MapComponent_AutoEquip.Get.GetCache(pawn);
             Outfit currentOutfit = pawn.outfits.CurrentOutfit;
 
             #region [  Wear Apparel  ]
@@ -45,18 +45,15 @@ namespace AutoEquip
                 {
                     foreach (Apparel ap in list)
                     {
-                        //if (Find.SlotGroupManager.SlotGroupAt(ap.Position) != null)
+                        if (configurarion.toWearApparel.Contains(ap))
                         {
-                            if (configurarion.toWearApparel.Contains(ap))
+                            if (pawn.CanReserveAndReach(ap, PathEndMode.OnCell, pawn.NormalMaxDanger(), 1))
                             {
-                                if (pawn.CanReserveAndReach(ap, PathEndMode.OnCell, pawn.NormalMaxDanger(), 1))
-                                {
 #if LOG && JOBS
-                Log.Message("Pawn " + pawn + " wear apparel: " + ap);
+                                Log.Message("Pawn " + pawn + " wear apparel: " + ap);
 #endif
-                                    configurarion.toWearApparel.Remove(ap);
-                                    return new Job(JobDefOf.Wear, ap);
-                                }
+                                configurarion.toWearApparel.Remove(ap);
+                                return new Job(JobDefOf.Wear, ap);
                             }
                         }
                     }

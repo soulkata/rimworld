@@ -13,7 +13,7 @@ namespace AutoEquip
     {
         public int nextOptimization;
         public List<Saveable_Outfit> outfitCache = new List<Saveable_Outfit>();
-        public List<Saveable_PawnNextApparelConfiguration> pawnCache = new List<Saveable_PawnNextApparelConfiguration>();
+        public List<Saveable_Pawn> pawnCache = new List<Saveable_Pawn>();
 
         public static IEnumerable<KeyValuePair<StatDef, float>> GetStatsOfWorkType(WorkTypeDef worktype)
         {
@@ -112,109 +112,20 @@ namespace AutoEquip
                     yield return new KeyValuePair<StatDef, float>(DefDatabase<StatDef>.GetNamed("HealingSpeed"), 1.0f);
                     yield break;
                 default:
-                    Log.Warning("WorkTypeDef " + worktype.defName + " not handled.");
+                    if (!ignowingWorktypeDef.Contains(worktype.defName))
+                    {
+                        Log.Warning("WorkTypeDef " + worktype.defName + " not handled.");
+                        ignowingWorktypeDef.Add(worktype.defName);
+                    }
                     yield break;
             }
-
-            //if (worktype == WorkTypeDefOf.Cleaning)
-            //{
-            //    //yield return new KeyValuePair<StatDef, float>(StatDefOf.MoveSpeed, 0.1f);
-            //    //yield return new KeyValuePair<StatDef, float>(StatDefOf.DoorOpenSpeed, 0.1f);
-            //    //yield return new KeyValuePair<StatDef, float>(StatDefOf.Cleanliness, 1.0f);
-            //    yield break;
-            //}
-
-            //if ((worktype == WorkTypeDefOf.Construction) ||
-            //    (worktype == WorkTypeDefOf.Repair))
-            //{
-            //    //yield return new KeyValuePair<StatDef, float>(StatDefOf.MoveSpeed, 0.1f);
-            //    //yield return new KeyValuePair<StatDef, float>(StatDefOf.DoorOpenSpeed, 0.1f);
-            //    yield return new KeyValuePair<StatDef, float>(StatDefOf.ConstructionSpeed, 1.0f);
-            //    yield return new KeyValuePair<StatDef, float>(StatDefOf.CarryingCapacity, 0.75f);
-            //    yield return new KeyValuePair<StatDef, float>(StatDefOf.SmoothingSpeed, 1.0f);
-            //    yield break;
-            //}
-
-            //if (worktype == WorkTypeDefOf.Cooking)
-            //{
-            //    //yield return new KeyValuePair<StatDef, float>(StatDefOf.DoorOpenSpeed, 0.1f);
-            //    yield return new KeyValuePair<StatDef, float>(StatDefOf.FoodPoisonChance, -1.0f);
-            //    yield return new KeyValuePair<StatDef, float>(StatDefOf.WorkTableWorkSpeedFactor, 0.1f);
-            //    yield return new KeyValuePair<StatDef, float>(StatDefOf.WorkSpeedGlobal, 0.1f);
-            //    yield break;
-            //}
-
-            //if (worktype == WorkTypeDefOf.Doctor)
-            //{
-            //    yield return new KeyValuePair<StatDef, float>(StatDefOf.BaseHealingQuality, 1.0f);
-            //    yield return new KeyValuePair<StatDef, float>(StatDefOf.MedicalPotency, 1.0f);
-            //    yield return new KeyValuePair<StatDef, float>(StatDefOf.MedicalTreatmentQualityFactor, 1.0f);
-            //    yield return new KeyValuePair<StatDef, float>(StatDefOf.SurgerySuccessChance, 1.0f);                
-            //    yield break;
-            //}
-
-            //if (worktype == WorkTypeDefOf.Firefighter)
-            //    yield break;
-
-            //if ((worktype == WorkTypeDefOf.Growing) ||
-            //    (worktype == WorkTypeDefOf.PlantCutting))
-            //{
-            //    //yield return new KeyValuePair<StatDef, float>(StatDefOf.MoveSpeed, 0.2f);
-            //    yield return new KeyValuePair<StatDef, float>(StatDefOf.HarvestFailChance, -1.0f);
-            //    yield return new KeyValuePair<StatDef, float>(StatDefOf.PlantWorkSpeed, 1.0f);
-            //    yield return new KeyValuePair<StatDef, float>(StatDefOf.WorkSpeedGlobal, 0.1f);
-            //    yield break;
-            //}
-
-            //if (worktype == WorkTypeDefOf.Handling)
-            //{
-            //    //yield return new KeyValuePair<StatDef, float>(StatDefOf.MoveSpeed, 0.3f);
-            //    yield return new KeyValuePair<StatDef, float>(StatDefOf.TameAnimalChance, 1.0f);
-            //    yield return new KeyValuePair<StatDef, float>(StatDefOf.TrainAnimalChance, 1.0f);
-            //    yield break;
-            //}
-
-            //if (worktype == WorkTypeDefOf.Hauling)
-            //{
-            //    //yield return new KeyValuePair<StatDef, float>(StatDefOf.MoveSpeed, 0.8f);
-            //    yield return new KeyValuePair<StatDef, float>(StatDefOf.CarryingCapacity, 1.0f);
-            //    //yield return new KeyValuePair<StatDef, float>(StatDefOf.DoorOpenSpeed, 0.8f);
-            //    yield break;
-            //}
-
-            //if (worktype == WorkTypeDefOf.Hunting)
-            //    yield break;
-
-            //if (worktype == WorkTypeDefOf.Mining)
-            //{
-            //    //yield return new KeyValuePair<StatDef, float>(StatDefOf.MoveSpeed, 0.1f);
-            //    yield return new KeyValuePair<StatDef, float>(StatDefOf.MiningSpeed, 1.0f);
-            //    yield return new KeyValuePair<StatDef, float>(StatDefOf.WorkSpeedGlobal, 0.1f);
-            //    yield break;
-            //}            
-
-            //if (worktype == WorkTypeDefOf.Research)
-            //{
-            //    yield return new KeyValuePair<StatDef, float>(StatDefOf.ResearchSpeed, 1.0f);
-            //    yield return new KeyValuePair<StatDef, float>(StatDefOf.ResearchSpeedFactor, 1.0f);
-            //    yield break;
-            //}
-
-            //if (worktype == WorkTypeDefOf.Warden)
-            //{
-            //    yield return new KeyValuePair<StatDef, float>(StatDefOf.RecruitPrisonerChance, 1.0f);
-            //    yield return new KeyValuePair<StatDef, float>(StatDefOf.SellPriceFactor, 1.0f);
-            //    yield return new KeyValuePair<StatDef, float>(StatDefOf.SocialImpact, 1.0f);
-            //    yield return new KeyValuePair<StatDef, float>(StatDefOf.TradePriceImprovement, 1.0f);
-            //    yield break;
-            //}
-
-            //yield return new KeyValuePair<StatDef, float>(StatDefOf.TrapSpringChance, 1.0f);
-            //yield return new KeyValuePair<StatDef, float>(StatDefOf.WorkSpeedGlobal, 0.1f);
-            //yield return new KeyValuePair<StatDef, float>(StatDefOf.WorkTableWorkSpeedFactor, 0.1f);
         }
 
-        public static StringBuilder logMessage;
+        static List<string> ignowingWorktypeDef = new List<string>();
+
+#if LOG
+        public static StringBuilder logMessage; 
+#endif
 
         public static MapComponent_AutoEquip Get
         {
@@ -234,7 +145,7 @@ namespace AutoEquip
         public override void ExposeData()
         {
             Scribe_Collections.LookList(ref this.outfitCache, "outfits", LookMode.Deep);
-            //Scribe_Collections.LookList(ref this.pawnCache, "pawnCache", LookMode.Deep);
+            Scribe_Collections.LookList(ref this.pawnCache, "pawns", LookMode.Deep);
             Scribe_Values.LookValue(ref this.nextOptimization, "nextOptimization", 0);
             base.ExposeData();
 
@@ -242,7 +153,7 @@ namespace AutoEquip
                 this.outfitCache = new List<Saveable_Outfit>();
 
             if (this.pawnCache == null)
-                this.pawnCache = new List<Saveable_PawnNextApparelConfiguration>();
+                this.pawnCache = new List<Saveable_Pawn>();
         }
 
         public Saveable_Outfit GetOutfit(Pawn pawn) { return this.GetOutfit(pawn.outfits.CurrentOutfit); }
@@ -255,20 +166,21 @@ namespace AutoEquip
 
             Saveable_Outfit ret = new Saveable_Outfit();
             ret.outfit = outfit;
-            ret.stats.Add(new Saveable_Outfit_StatDef() { statDef = StatDefOf.ArmorRating_Sharp, strength = 1.00f });
-            ret.stats.Add(new Saveable_Outfit_StatDef() { statDef = StatDefOf.ArmorRating_Blunt, strength = 0.75f });
+            ret.stats.Add(new Saveable_StatDef() { statDef = StatDefOf.ArmorRating_Sharp, strength = 1.00f });
+            ret.stats.Add(new Saveable_StatDef() { statDef = StatDefOf.ArmorRating_Blunt, strength = 0.75f });
 
             this.outfitCache.Add(ret);
 
             return ret;
         }
 
-        public Saveable_PawnNextApparelConfiguration GetCache(Pawn pawn)
+        public Saveable_Pawn GetCache(Pawn pawn)
         {
-            foreach (Saveable_PawnNextApparelConfiguration c in this.pawnCache)
+            foreach (Saveable_Pawn c in this.pawnCache)
                 if (c.pawn == pawn)
                     return c;
-            Saveable_PawnNextApparelConfiguration n = new Saveable_PawnNextApparelConfiguration();
+            this.InjectTab(pawn.def);
+            Saveable_Pawn n = new Saveable_Pawn();
             n.pawn = pawn;
             this.pawnCache.Add(n);
             return n;
@@ -286,185 +198,30 @@ namespace AutoEquip
             MapComponent_AutoEquip.logMessage.AppendLine("Start Scaning Best Apparel");
             MapComponent_AutoEquip.logMessage.AppendLine();
 #endif
+            List<Saveable_Pawn> newSaveableList = new List<Saveable_Pawn>();
+            List<PawnCalcForApparel> newCalcList = new List<PawnCalcForApparel>();
 
-            this.pawnCache = new List<Saveable_PawnNextApparelConfiguration>();
             List<Apparel> allApparels = new List<Apparel>(Find.ListerThings.ThingsInGroup(ThingRequestGroup.Apparel).OfType<Apparel>());            
             foreach (Pawn pawn in Find.ListerPawns.FreeColonists)
             {
-                this.InjectTab(pawn.def);
+                Saveable_Pawn newPawnSaveable = this.GetCache(pawn);
+                PawnCalcForApparel newPawnCalc = new PawnCalcForApparel(newPawnSaveable);
 
-                Saveable_PawnNextApparelConfiguration pawnConfiguration = new Saveable_PawnNextApparelConfiguration();
-                pawnConfiguration.pawn = pawn;
-                pawnConfiguration.fixedApparels = new List<Apparel>();
-                pawnConfiguration.NormalizeCalculedStatDef();
+                newSaveableList.Add(newPawnSaveable);
+                newCalcList.Add(newPawnCalc);
 
-                this.pawnCache.Add(pawnConfiguration);
-
-                foreach (Apparel pawnApparel in pawn.apparel.WornApparel)
-                    if (pawn.outfits.forcedHandler.AllowedToAutomaticallyDrop(pawnApparel))
-                        allApparels.Insert(0, pawnApparel);
-                    else
-                        pawnConfiguration.fixedApparels.Add(pawnApparel);
+                newPawnCalc.InitializeFixedApparelsAndGetAvaliableApparels(allApparels);
             }
 
-#if LOG && ALLAPPARELS
-            MapComponent_AutoEquip.logMessage.AppendLine("All Apparels");
-            foreach (Apparel a in allApparels)
-                MapComponent_AutoEquip.logMessage.AppendLine("   " + a.LabelCap);
-            MapComponent_AutoEquip.logMessage.AppendLine();
-#endif
-
-            foreach (Saveable_PawnNextApparelConfiguration pawnConfiguration in this.pawnCache)
-            {
-                pawnConfiguration.outfit = pawnConfiguration.pawn.outfits.CurrentOutfit;
-                pawnConfiguration.allApparels = new List<Apparel>(allApparels);
-                pawnConfiguration.calculedApparel = new List<Apparel>(pawnConfiguration.fixedApparels);
-                pawnConfiguration.optimized = false;
-                pawnConfiguration.CalculateNeededWarmth(GenDate.CurrentMonth);
-            }
-
-            while (true)
-            {
-                bool changed = false;
-                foreach (Saveable_PawnNextApparelConfiguration pawnConfiguration in this.pawnCache)
-                {
-                    pawnConfiguration.OptimeFromList(ref changed);
-
-#if LOG && PARTIAL_OPTIMIZE
-                    MapComponent_AutoEquip.logMessage.AppendLine("Optimization For Pawn: " + pawnConfiguration.pawn.LabelCap);
-                    foreach (Apparel ap in pawnConfiguration.calculedApparel)
-                        MapComponent_AutoEquip.logMessage.AppendLine("    * Apparel: " + ap.LabelCap);
-                    MapComponent_AutoEquip.logMessage.AppendLine();
-#endif
-                }
-
-                //if (!changed)
-                //    break;
-
-                foreach (Saveable_PawnNextApparelConfiguration pawnConfiguration in this.pawnCache)
-                {
-                    foreach (Apparel apprel in pawnConfiguration.calculedApparel)
-                    {
-                        float? apparalGainPercentual = null;
-
-                        foreach (Saveable_PawnNextApparelConfiguration otherPawn in this.pawnCache)
-                        {
-                            if (otherPawn == pawnConfiguration)
-                                continue;
-
-                            foreach (Apparel otherApprel in otherPawn.calculedApparel)
-                            {
-                                if (otherApprel == apprel)
-                                {
-                                    if (!apparalGainPercentual.HasValue)
-                                    {
-                                        pawnConfiguration.NormalizeTotalStats();
-                                        float noStats = pawnConfiguration.ApparelTotalStats(pawnConfiguration.calculedApparel, apprel);
-                                        if (noStats == 0)
-                                            Log.Warning("No Stat to optimize apparel");
-                                        apparalGainPercentual = pawnConfiguration.totalStats.Value / noStats;
-
-                                        if (pawnConfiguration.pawn.apparel.WornApparel.Contains(apprel))
-                                            apparalGainPercentual *= 1.01f;
-                                    }
-
-                                    otherPawn.NormalizeTotalStats();
-
-                                    float otherNoStats = otherPawn.ApparelTotalStats(otherPawn.calculedApparel, apprel);
-                                    if (otherNoStats == 0)
-                                        Log.Warning("No Stat to optimize apparel");
-                                    float otherApparalGainPercentual = otherPawn.totalStats.Value / otherNoStats;
-
-                                    if (otherPawn.pawn.apparel.WornApparel.Contains(apprel))
-                                        otherApparalGainPercentual *= 1.01f;
-
-                                    if (apparalGainPercentual.Value > otherApparalGainPercentual)
-                                    {
-#if LOG && CONFLICT
-                                        MapComponent_AutoEquip.logMessage.AppendLine("Conflict: " + apprel.LabelCap + "   Winner: " + pawnConfiguration.pawn.LabelCap + " Looser: " + otherPawn.pawn.LabelCap);
-#endif
-                                        otherPawn.LooseConflict(apprel);
-                                        break;
-                                    }
-                                    else
-                                    {
-#if LOG && CONFLICT
-                                        MapComponent_AutoEquip.logMessage.AppendLine("Conflict: " + apprel.LabelCap + "   Winner: " + otherPawn.pawn.LabelCap + " Looser: " + pawnConfiguration.pawn.LabelCap);
-#endif
-                                        pawnConfiguration.LooseConflict(apprel);
-                                        break;
-                                    }
-                                }
-                            }
-
-                            if ((!pawnConfiguration.optimized) ||
-                                (!otherPawn.optimized))
-                                break;
-                        }
-
-                        if (!pawnConfiguration.optimized)
-                            break;
-                    }
-                }
-
-                if (!this.pawnCache.Where(i => !i.optimized).Any())
-                    break;
-
-#if LOG && CONFLICT
-                MapComponent_AutoEquip.logMessage.AppendLine();
-#endif
-            }
-
-            foreach (Saveable_PawnNextApparelConfiguration pawnConfiguration in this.pawnCache)
-            {
-                pawnConfiguration.toWearApparel = new List<Apparel>();
-
-                List<Apparel> pawnApparel = new List<Apparel>(pawnConfiguration.pawn.apparel.WornApparel);
-                foreach (Apparel ap in pawnConfiguration.calculedApparel)
-                {
-                    if (pawnApparel.Contains(ap))
-                    {
-                        pawnApparel.Remove(ap);
-                        continue;
-                    }
-                    pawnConfiguration.toWearApparel.Add(ap);
-                }
-                foreach (Apparel ap in pawnApparel)
-                    pawnConfiguration.toDropApparel.Add(ap);
-
-#if LOG && CHANGES
-                if (pawnConfiguration.toWearApparel.Any() || pawnConfiguration.toDropApparel.Any())
-                {
-                    MapComponent_AutoEquip.logMessage.AppendLine();
-                    MapComponent_AutoEquip.logMessage.AppendLine("Apparel Change for: " + pawnConfiguration.pawn);
-
-                    foreach (Apparel ap in pawnConfiguration.toDropApparel)
-                        MapComponent_AutoEquip.logMessage.AppendLine(" * Drop: " + ap);
-
-                    foreach (Apparel ap in pawnConfiguration.toWearApparel)
-                        MapComponent_AutoEquip.logMessage.AppendLine(" * Wear: " + ap);
-                }
-#endif
-
-                pawnConfiguration.fixedApparels = null;
-                pawnConfiguration.allApparels = null;
-                pawnConfiguration.outfit = null;
-                pawnConfiguration.totalStats = null;
-            }
+            this.pawnCache = newSaveableList;
+            PawnCalcForApparel.DoOptimizeApparel(newCalcList, allApparels);
 
 #if LOG
-            Type T = typeof(GUIUtility);
-            PropertyInfo systemCopyBufferProperty = T.GetProperty("systemCopyBuffer", BindingFlags.Static | BindingFlags.NonPublic);
-            systemCopyBufferProperty.SetValue(null, MapComponent_AutoEquip.logMessage.ToString(), null);
-
-            Log.Message(MapComponent_AutoEquip.logMessage.ToString());
-            MapComponent_AutoEquip.logMessage = null;            
-
             this.nextOptimization = Find.TickManager.TicksGame + 500;
 #else
-            this.nextOptimization = Find.TickManager.TicksGame + 3000;
+            this.nextOptimization = Find.TickManager.TicksGame + 5000;
 #endif
-        }
+        }        
 
         private void InjectTab(ThingDef thingDef)
         {
@@ -485,6 +242,6 @@ namespace AutoEquip
             for (int i = thingDef.inspectorTabs.Count - 1; i >= 0; i--)
                 if (thingDef.inspectorTabs[i] == typeof(ITab_Pawn_Gear))
                     thingDef.inspectorTabs.RemoveAt(i);
-        }
+        }        
     }
 }

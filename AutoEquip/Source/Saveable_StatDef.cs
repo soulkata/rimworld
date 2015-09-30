@@ -3,7 +3,7 @@ using Verse;
 
 namespace AutoEquip
 {
-    public class Saveable_Outfit_StatDef : IExposable
+    public class Saveable_StatDef : IExposable
     {
         public StatDef statDef;
         public float strength;

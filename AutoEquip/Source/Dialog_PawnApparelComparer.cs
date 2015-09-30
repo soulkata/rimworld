@@ -36,7 +36,7 @@ namespace AutoEquip
         public override void DoWindowContents(Rect windowRect)
         {
             MapComponent_AutoEquip mapComponent = MapComponent_AutoEquip.Get;
-            Saveable_PawnNextApparelConfiguration conf = mapComponent.GetCache(this.pawn);
+            PawnCalcForApparel pawnAutoEquip = new PawnCalcForApparel(mapComponent.GetCache(this.pawn));
             List<Apparel> allApparels = new List<Apparel>(Find.ListerThings.ThingsInGroup(ThingRequestGroup.Apparel).OfType<Apparel>());
             foreach (Pawn pawn in Find.ListerPawns.FreeColonists)
             {
@@ -55,7 +55,7 @@ namespace AutoEquip
             float apparelGainWidth = 100f;
             float apparelLabelWidth = (groupRect.width - apparelScoreWidth - apparelGainWidth) / 3 - 8f - 8f;
             float apparelEquipedWidth = apparelLabelWidth;
-            float apparelOwnerWidth = apparelLabelWidth;            
+            float apparelOwnerWidth = apparelLabelWidth;
 
             Rect itemRect = new Rect(groupRect.xMin + 4f, groupRect.yMin, groupRect.width - 8f, 28f);
 
@@ -80,7 +80,7 @@ namespace AutoEquip
 
             Widgets.BeginScrollView(groupRect, ref scrollPosition, viewRect);
 
-            allApparels = allApparels.OrderByDescending(i => { float g; if (conf.ApparelScoreGain(i, out g)) return g; return 0f; }).ToList();
+            allApparels = allApparels.OrderByDescending(i => { float g; if (pawnAutoEquip.CalculateApparelScoreGain(i, out g)) return g; return -1000f; }).ToList();
 
             foreach (Apparel currentAppel in allApparels)
             {
@@ -104,7 +104,7 @@ namespace AutoEquip
                             break;
                         }
 
-                    foreach (Apparel a in mapComponent.GetCache(pawn).calculedApparel)
+                    foreach (Apparel a in mapComponent.GetCache(pawn).targetApparel)
                         if (a == currentAppel)
                         {
                             target = pawn;
@@ -117,19 +117,19 @@ namespace AutoEquip
                 }
 
                 float gain;
-                if (conf.ApparelScoreGain(currentAppel, out gain))
+                if (pawnAutoEquip.CalculateApparelScoreGain(currentAppel, out gain))
                     this.DrawLine(ref itemRect,
                         currentAppel, currentAppel.LabelCap, apparelLabelWidth,
                         equiped, equiped == null ? null : equiped.LabelCap, apparelEquipedWidth,
                         target, target == null ? null : target.LabelCap, apparelOwnerWidth,
-                        conf.ApparelScoreRaw(currentAppel).ToString("N5"), apparelScoreWidth,
+                        pawnAutoEquip.CalculateApparelScoreRaw(currentAppel).ToString("N5"), apparelScoreWidth,
                         gain.ToString("N5"), apparelGainWidth);
                 else
                     this.DrawLine(ref itemRect,
                         currentAppel, currentAppel.LabelCap, apparelLabelWidth,
                         equiped, equiped == null ? null : equiped.LabelCap, apparelEquipedWidth,
                         target, target == null ? null : target.LabelCap, apparelOwnerWidth,
-                        conf.ApparelScoreRaw(currentAppel).ToString("N5"), apparelScoreWidth,
+                        pawnAutoEquip.CalculateApparelScoreRaw(currentAppel).ToString("N5"), apparelScoreWidth,
                         "No Allow", apparelGainWidth);
 
                 listRect.yMin = itemRect.yMax;
