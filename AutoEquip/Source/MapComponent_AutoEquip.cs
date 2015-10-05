@@ -178,8 +178,7 @@ namespace AutoEquip
         {
             foreach (Saveable_Pawn c in this.pawnCache)
                 if (c.pawn == pawn)
-                    return c;
-            this.InjectTab(pawn.def);
+                    return c;            
             Saveable_Pawn n = new Saveable_Pawn();
             n.pawn = pawn;
             this.pawnCache.Add(n);
@@ -204,6 +203,7 @@ namespace AutoEquip
             List<Apparel> allApparels = new List<Apparel>(Find.ListerThings.ThingsInGroup(ThingRequestGroup.Apparel).OfType<Apparel>());            
             foreach (Pawn pawn in Find.ListerPawns.FreeColonists)
             {
+                this.InjectTab(pawn.def);
                 Saveable_Pawn newPawnSaveable = this.GetCache(pawn);
                 PawnCalcForApparel newPawnCalc = new PawnCalcForApparel(newPawnSaveable);
 
@@ -225,6 +225,7 @@ namespace AutoEquip
 
         private void InjectTab(ThingDef thingDef)
         {
+            Debug.Log("Inject Tab");
             if (thingDef.inspectorTabsResolved == null)
             {
                 thingDef.inspectorTabsResolved = new List<ITab>();
@@ -233,7 +234,10 @@ namespace AutoEquip
             }
 
             if (!thingDef.inspectorTabsResolved.OfType<ITab_Pawn_AutoEquip>().Any())
+            {
                 thingDef.inspectorTabsResolved.Add(ITabManager.GetSharedInstance(typeof(ITab_Pawn_AutoEquip)));
+                Debug.Log("Add Tab");
+            }
 
             for (int i = thingDef.inspectorTabsResolved.Count - 1; i >= 0; i--)
                 if (thingDef.inspectorTabsResolved[i].GetType() == typeof(ITab_Pawn_Gear))

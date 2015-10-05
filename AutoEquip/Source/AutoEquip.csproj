@@ -24,7 +24,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\..\RimWorld\Mods\AutoEquip\Assemblies\</OutputPath>
+    <OutputPath>..\Assemblies\</OutputPath>
     <DefineConstants>TRACE;LOG_; CHANGES; JOBS; CONFLICT; ALLAPPARELS; PARTIAL_OPTIMIZE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -61,6 +61,10 @@
     <Compile Include="Tab_Pawn_AutoEquip.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\About\About.xml">
+      <Link>About.xml</Link>
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="..\Defs\MainTabDefs\MainTabs.xml">
       <Link>MainTabs.xml</Link>
     </Content>

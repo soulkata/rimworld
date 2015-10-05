@@ -41,8 +41,6 @@ namespace AutoEquip
             this.outfit = pawn.outfits.CurrentOutfit;
             this.stats = saveablePawn.NormalizeCalculedStatDef().ToArray();
 
-            temperatureAjust = 20;
-
             float targetTemperature = GenTemperature.AverageTemperatureAtWorldCoordsForMonth(Find.Map.WorldCoords, month) + temperatureAjust;
 
             #region [  needWarmCurve  ]
@@ -50,6 +48,9 @@ namespace AutoEquip
             float stat = this.pawn.def.GetStatValueAbstract(StatDefOf.ComfyTemperatureMin, null);
 
             stat = targetTemperature - stat;
+
+            Log.Message("Target: " + targetTemperature + "     Stat: " + this.pawn.def.GetStatValueAbstract(StatDefOf.ComfyTemperatureMin, null) + "    Value: " + stat);
+
 
             if (stat > 10f)
                 this.needWarmCurve = new SimpleCurve { new CurvePoint(0f, 1f) };
@@ -64,7 +65,7 @@ namespace AutoEquip
                         };
                 else
                     if (stat > 0)
-                        this.needCoolCurve = new SimpleCurve 
+                        this.needWarmCurve = new SimpleCurve 
                             {
                                 new CurvePoint(+03f, -1.00f), 
                                 new CurvePoint(+01f, -1.00f), 
@@ -74,7 +75,7 @@ namespace AutoEquip
                             };
                     else
                         if (stat > -3)
-                            this.needCoolCurve = new SimpleCurve 
+                            this.needWarmCurve = new SimpleCurve 
                             {
                                 new CurvePoint(+03f, -1.00f), 
                                 new CurvePoint(+01f, -1.00f), 
@@ -83,7 +84,7 @@ namespace AutoEquip
                                 new CurvePoint(-100f, +2.00f) 
                             };
                         else
-                            this.needCoolCurve = new SimpleCurve 
+                            this.needWarmCurve = new SimpleCurve 
                                 {
                                     new CurvePoint(+01f, -1.00f), 
                                     new CurvePoint(+00f, +1.00f), 
