@@ -2,10 +2,10 @@
 <MainTabDefs>  
   
   <MainTabDef>
-    <defName>Outfits</defName>
-    <label>outfits</label>
-    <description>Configure what each colonist is allowed to wear.</description>
-    <windowClass>AutoEquip.MainTabWindow_OutfitsAutoEquip</windowClass>
+    <defName>Assign</defName>
+    <label>assign</label>
+    <description>Configure what each colonist is allowed to wear, and how to react to nearby enemies.</description>
+    <windowClass>AutoEquip.MainTabWindow_AssignAutoEquip</windowClass>
     <order>30</order>
     <defaultToggleKey>F3</defaultToggleKey>
   </MainTabDef>
