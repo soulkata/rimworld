@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
+using Verse.AI;
 
 namespace AutoEquip
 {
@@ -27,7 +28,7 @@ namespace AutoEquip
         public override void ExposeData()
         {
             Scribe_Collections.LookList(ref this.outfitCache, "outfits", LookMode.Deep);
-            base.ExposeData();            
+            base.ExposeData();
         }
 
         public Saveable_Outfit GetOutfit(Pawn pawn) { return this.GetOutfit(pawn.outfits.CurrentOutfit); }

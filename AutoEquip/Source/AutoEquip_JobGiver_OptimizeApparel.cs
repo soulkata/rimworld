@@ -8,14 +8,11 @@ using Verse.AI;
 
 namespace AutoEquip
 {
-    public class JobGiver_OptimizeApparelAutoEquip : ThinkNode_JobGiver
+    public static class AutoEquip_JobGiver_OptimizeApparel
     {
         private const int ApparelOptimizeCheckInterval = 3000;
-
         private const float MinScoreGainToCare = 0.09f;
-
         private const float ScoreFactorIfNotReplacing = 10f;
-
         private static NeededWarmth neededWarmth;
 #if LOG
         private static StringBuilder debugSb;
@@ -42,35 +39,31 @@ namespace AutoEquip
             new CurvePoint(1f, 1f)
         };
 
-        private void SetNextOptimizeTick(Pawn pawn)
+        private static void SetNextOptimizeTick(Pawn pawn)
         {
             pawn.mindState.nextApparelOptimizeTick = Find.TickManager.TicksGame + 3000;
         }
 
-        protected override Job TryGiveTerminalJob(Pawn pawn)
+        internal static Job _TryGiveTerminalJob(this JobGiver_OptimizeApparel obj, Pawn pawn)
         {
             if (pawn.outfits == null)
             {
                 Log.ErrorOnce(pawn + " tried to run JobGiver_OptimizeApparel without an OutfitTracker", 5643897);
                 return null;
             }
+
             if (pawn.Faction != Faction.OfColony)
             {
                 Log.ErrorOnce("Non-colonist " + pawn + " tried to optimize apparel.", 764323);
                 return null;
             }
+
 #if !LOG
             if (Find.TickManager.TicksGame < pawn.mindState.nextApparelOptimizeTick)
                 return null;
-#else
-            JobGiver_OptimizeApparelAutoEquip.debugSb = new StringBuilder();
-            JobGiver_OptimizeApparelAutoEquip.debugSb.AppendLine(string.Concat(new object[]
-            {
-                "Scanning for ",
-                pawn,
-                " at ",
-                pawn.Position
-            }));
+#else            
+            AutoEquip_JobGiver_OptimizeApparel.debugSb = new StringBuilder();
+            AutoEquip_JobGiver_OptimizeApparel.debugSb.AppendLine("Scanning for " + pawn + " at " + pawn.Position);
 #endif
 
             #region [  Drops forbidden Apparel  ]
@@ -79,7 +72,7 @@ namespace AutoEquip
             List<Apparel> wornApparel = pawn.apparel.WornApparel;
             for (int i = wornApparel.Count - 1; i >= 0; i--)
             {
-                if ((!HandleOutfitFilter(currentOutfit, wornApparel[i])) && pawn.outfits.forcedHandler.AllowedToAutomaticallyDrop(wornApparel[i]))
+                if ((!currentOutfit.filter.Allows(wornApparel[i])) && pawn.outfits.forcedHandler.AllowedToAutomaticallyDrop(wornApparel[i]))
                 {
                     return new Job(JobDefOf.RemoveApparel, wornApparel[i])
                     {
@@ -97,16 +90,16 @@ namespace AutoEquip
             List<Thing> list = Find.ListerThings.ThingsInGroup(ThingRequestGroup.Apparel);
             if (list.Count == 0)
             {
-                this.SetNextOptimizeTick(pawn);
+                AutoEquip_JobGiver_OptimizeApparel.SetNextOptimizeTick(pawn);
                 return null;
-            } 
+            }
 
             #endregion
 
-            JobGiver_OptimizeApparelAutoEquip.neededWarmth = JobGiver_OptimizeApparelAutoEquip.CalculateNeededWarmth(pawn, GenDate.CurrentMonth);
+            AutoEquip_JobGiver_OptimizeApparel.neededWarmth = AutoEquip_JobGiver_OptimizeApparel.CalculateNeededWarmth(pawn, GenDate.CurrentMonth);
 #if LOG
-            if (JobGiver_OptimizeApparelAutoEquip.neededWarmth != NeededWarmth.Any)
-                JobGiver_OptimizeApparelAutoEquip.debugSb.AppendLine("Temperature: " + JobGiver_OptimizeApparelAutoEquip.neededWarmth);
+            if (AutoEquip_JobGiver_OptimizeApparel.neededWarmth != NeededWarmth.Any)
+                AutoEquip_JobGiver_OptimizeApparel.debugSb.AppendLine("Temperature: " + AutoEquip_JobGiver_OptimizeApparel.neededWarmth);
 #endif
 
             for (int j = 0; j < list.Count; j++)
@@ -114,7 +107,7 @@ namespace AutoEquip
 				Apparel apparel = (Apparel)list[j];
 
 #if LOG
-                JobGiver_OptimizeApparelAutoEquip.debugSb.AppendLine(apparel.LabelCap);
+                AutoEquip_JobGiver_OptimizeApparel.debugSb.AppendLine(apparel.LabelCap);
 #endif
 
                 if (HandleOutfitFilter(currentOutfit, apparel))
@@ -123,7 +116,7 @@ namespace AutoEquip
 					{
 						if (!apparel.IsForbidden(pawn))
 						{
-							float num2 = JobGiver_OptimizeApparelAutoEquip.ApparelScoreGain(pawn, apparel);
+							float num2 = AutoEquip_JobGiver_OptimizeApparel.ApparelScoreGain(pawn, apparel);
                             if (num2 >= 0.09f && num2 >= num)
 							{
 								if (ApparelUtility.HasPartsToWear(pawn, apparel.def))
@@ -135,44 +128,44 @@ namespace AutoEquip
 									}
 #if LOG
                                     else
-                                        JobGiver_OptimizeApparelAutoEquip.debugSb.AppendLine("  CantReserve");
+                                        AutoEquip_JobGiver_OptimizeApparel.debugSb.AppendLine("  CantReserve");
 #endif
                                 }
                             }
 						}
 #if LOG
                         else
-                            JobGiver_OptimizeApparelAutoEquip.debugSb.AppendLine("  IsForbidden");
+                            AutoEquip_JobGiver_OptimizeApparel.debugSb.AppendLine("  IsForbidden");
 #endif
                     }
 #if LOG
                     else
-                        JobGiver_OptimizeApparelAutoEquip.debugSb.AppendLine("  SlotGroupAtNull");
+                        AutoEquip_JobGiver_OptimizeApparel.debugSb.AppendLine("  SlotGroupAtNull");
 #endif
                 }
 #if LOG
                 else
-                    JobGiver_OptimizeApparelAutoEquip.debugSb.AppendLine("  FilterNotAllows");
+                    AutoEquip_JobGiver_OptimizeApparel.debugSb.AppendLine("  FilterNotAllows");
 #endif
             }
 
 #if LOG
             if (thing != null)
             {
-                JobGiver_OptimizeApparelAutoEquip.debugSb.AppendLine();
-                JobGiver_OptimizeApparelAutoEquip.debugSb.AppendLine("BEST: " + thing.LabelCap + ":        Raw: " + ApparelScoreRaw(pawn, thing).ToString("F2") + "        Gain: " + JobGiver_OptimizeApparelAutoEquip.ApparelScoreGain(pawn, thing).ToString("F2"));
+                AutoEquip_JobGiver_OptimizeApparel.debugSb.AppendLine();
+                AutoEquip_JobGiver_OptimizeApparel.debugSb.AppendLine("BEST: " + thing.LabelCap + ":        Raw: " + ApparelScoreRaw(pawn, thing).ToString("F2") + "        Gain: " + AutoEquip_JobGiver_OptimizeApparel.ApparelScoreGain(pawn, thing).ToString("F2"));
             }
 
-            if (JobGiver_OptimizeApparelAutoEquip.debugSb.Length > 0)
-                Log.Message(JobGiver_OptimizeApparelAutoEquip.debugSb.ToString());
-            JobGiver_OptimizeApparelAutoEquip.debugSb = null;
+            if (AutoEquip_JobGiver_OptimizeApparel.debugSb.Length > 0)
+                Log.Message(AutoEquip_JobGiver_OptimizeApparel.debugSb.ToString());
+            AutoEquip_JobGiver_OptimizeApparel.debugSb = null;
 #endif
 
             #region [  If no Apparel is Selected to Wear, Delays the next search  ]
 
             if (thing == null)
             {
-                this.SetNextOptimizeTick(pawn);
+                AutoEquip_JobGiver_OptimizeApparel.SetNextOptimizeTick(pawn);
                 return null;
             } 
 
@@ -192,7 +185,7 @@ namespace AutoEquip
             {
                 return -1000f;
             }
-            float num = JobGiver_OptimizeApparelAutoEquip.ApparelScoreRaw(pawn, ap);
+            float num = AutoEquip_JobGiver_OptimizeApparel.ApparelScoreRaw(pawn, ap);
             List<Apparel> wornApparel = pawn.apparel.WornApparel;
             bool flag = false;
             for (int i = 0; i < wornApparel.Count; i++)
@@ -203,7 +196,7 @@ namespace AutoEquip
                     {
                         return -1000f;
                     }
-                    num -= JobGiver_OptimizeApparelAutoEquip.ApparelScoreRaw(pawn, wornApparel[i]);
+                    num -= AutoEquip_JobGiver_OptimizeApparel.ApparelScoreRaw(pawn, wornApparel[i]);
                     flag = true;
                 }
             }
@@ -240,17 +233,17 @@ namespace AutoEquip
 
         public static float ApparalScoreRawInsulationColdAjust(Apparel ap)
         {
-            switch (JobGiver_OptimizeApparelAutoEquip.neededWarmth)
+            switch (AutoEquip_JobGiver_OptimizeApparel.neededWarmth)
             {
                 case NeededWarmth.Warm:
                     {
                         float statValueAbstract = ap.def.GetStatValueAbstract(StatDefOf.Insulation_Cold, null);
-                        return JobGiver_OptimizeApparelAutoEquip.InsulationColdScoreFactorCurve_NeedWarm.Evaluate(statValueAbstract);
+                        return AutoEquip_JobGiver_OptimizeApparel.InsulationColdScoreFactorCurve_NeedWarm.Evaluate(statValueAbstract);
                     }
                 case NeededWarmth.Cool:
                     {
                         float statValueAbstract = ap.def.GetStatValueAbstract(StatDefOf.Insulation_Heat, null);
-                        return JobGiver_OptimizeApparelAutoEquip.InsulationWarmScoreFactorCurve_NeedCold.Evaluate(statValueAbstract);
+                        return AutoEquip_JobGiver_OptimizeApparel.InsulationWarmScoreFactorCurve_NeedCold.Evaluate(statValueAbstract);
                     }
                 default:
                     return 1;
@@ -262,7 +255,7 @@ namespace AutoEquip
             if (ap.def.useHitPoints)
             {
                 float x = (float)ap.HitPoints / (float)ap.MaxHitPoints;
-                return JobGiver_OptimizeApparelAutoEquip.HitPointsPercentScoreFactorCurve.Evaluate(x);
+                return AutoEquip_JobGiver_OptimizeApparel.HitPointsPercentScoreFactorCurve.Evaluate(x);
             }
             else
                 return 1;

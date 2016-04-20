@@ -1,8 +1,6 @@
 ﻿using RimWorld;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using Verse;
@@ -18,8 +16,9 @@ namespace AutoEquip
 		private Vector2 scrollPosition;
         private Vector2 scrollPositionStats;
 		private Outfit selOutfitInt;
+        private static StatDef[] sortedDefs;
 
-		private static ThingFilter apparelGlobalFilter;
+        private static ThingFilter apparelGlobalFilter;
 
 		private static Regex validNameRegex = new Regex("^[a-zA-Z0-9 '\\-]*$");
 
@@ -202,39 +201,45 @@ namespace AutoEquip
             rect6.yMin += 12f;
 
             Listing_Standard listing_Standard = new Listing_Standard(rect6);
-            listing_Standard.OverrideColumnWidth = rect6.width;            
+            listing_Standard.OverrideColumnWidth = rect6.width;
 
-            foreach (StatDef stat in DefDatabase<StatDef>.AllDefs)
-            {
-                Saveable_Outfit_StatDef outfitStat = stats.FirstOrDefault(i => i.statDef == stat);
-                bool active = outfitStat != null;
-                listing_Standard.DoLabelCheckbox(stat.label, ref active);
+            if (Dialog_ManageOutfitsAutoEquip.sortedDefs == null)
+                Dialog_ManageOutfitsAutoEquip.sortedDefs = DefDatabase<StatDef>.AllDefs.OrderBy(i => i.category.LabelCap).ThenBy(i => i.LabelCap).ToArray();
 
-                if (active)
-                {
-                    if (outfitStat == null)
-                    {
-                        outfitStat = new Saveable_Outfit_StatDef();
-                        outfitStat.statDef = stat;
-                        outfitStat.strength = 0;
-                    }
-                    if (!stats.Contains(outfitStat))
-                        stats.Add(outfitStat);
-
-                    outfitStat.strength = listing_Standard.DoSlider(outfitStat.strength, -1f, 1f);
-                }
-                else
-                {                    
-                    if (stats.Contains(outfitStat))
-                        stats.Remove(outfitStat);
-                    outfitStat = null;
-                }
-            }
+            foreach (StatDef stat in Dialog_ManageOutfitsAutoEquip.sortedDefs)
+                DrawStat(stats, listing_Standard, stat);
 
             listing_Standard.End();
 
 
             Widgets.EndScrollView();
         }
-	}
+
+        private static void DrawStat(List<Saveable_Outfit_StatDef> stats, Listing_Standard listing_Standard, StatDef stat)
+        {
+            Saveable_Outfit_StatDef outfitStat = stats.FirstOrDefault(i => i.statDef == stat);
+            bool active = outfitStat != null;
+            listing_Standard.DoLabelCheckbox(stat.label, ref active);
+
+            if (active)
+            {
+                if (outfitStat == null)
+                {
+                    outfitStat = new Saveable_Outfit_StatDef();
+                    outfitStat.statDef = stat;
+                    outfitStat.strength = 0;
+                }
+                if (!stats.Contains(outfitStat))
+                    stats.Add(outfitStat);
+
+                outfitStat.strength = listing_Standard.DoSlider(outfitStat.strength, -1f, 1f);
+            }
+            else
+            {
+                if (stats.Contains(outfitStat))
+                    stats.Remove(outfitStat);
+                outfitStat = null;
+            }
+        }
+    }
 }
