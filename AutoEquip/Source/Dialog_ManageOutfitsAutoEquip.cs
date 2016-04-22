@@ -138,10 +138,15 @@ namespace AutoEquip
             ThingFilterUI.DoThingFilterConfigWindow(rect6, ref this.scrollPosition, this.SelectedOutfit.filter, Dialog_ManageOutfitsAutoEquip.apparelGlobalFilter, 16);
             GUI.EndGroup();
 
+            Saveable_Outfit saveout = MapComponent_AutoEquip.Get.GetOutfit(this.SelectedOutfit);
+
             rect4 = new Rect(300f, 40f, inRect.width - 300f, inRect.height - 40f - this.CloseButSize.y).ContractedBy(10f);
             GUI.BeginGroup(rect4);
+
+            saveout.addWorkStats = GUI.Toggle(new Rect(000f, 00f, rect4.width, 20f), saveout.addWorkStats, "AddWorkingStats".Translate());
+
             rect6 = new Rect(0f, 40f, rect4.width, rect4.height - 45f - 10f);
-            Dialog_ManageOutfitsAutoEquip.DoStatsInput(rect6, ref this.scrollPositionStats, MapComponent_AutoEquip.Get.GetOutfit(this.SelectedOutfit).stats);
+            Dialog_ManageOutfitsAutoEquip.DoStatsInput(rect6, ref this.scrollPositionStats, saveout.stats);
             GUI.EndGroup();
 		}
 
